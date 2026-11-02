@@ -625,13 +625,11 @@ Change them if your place has a name of its own:
   "members": [
     {"name": "Sara Ahmadi", "student_id": "40131001", "github": "sara-a"},
     {"name": "Ali Karimi", "student_id": "40131002", "github": "alikarimi"}
-  ],
-  "ai_tools": ""
+  ]
 }
 ```
 
 `title` (Persian) and `title_en` go on the sign at your plot's gate.
-`ai_tools` says how you used AI tools, if at all, as the course rules ask.
 
 Your folder looks like this; you change nothing outside it:
 

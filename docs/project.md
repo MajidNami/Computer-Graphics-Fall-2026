@@ -176,7 +176,5 @@ A phase is submitted in two places:
    It is written to `dist/CG_PROJ_P1_team07.zip` and holds your team folder,
    the check report, the screenshots and the commit it was made from.
 
-Late days come out of the course's fixed 72-hour allowance. AI tools are
-allowed under the course rules if you say how you used them, in `team.json`
-(`ai_tools`) and in your report; the defence is what counts.
+Late days come out of the course's fixed 72-hour allowance.
 [docs/workflow.md](workflow.md) walks through the steps.

@@ -405,8 +405,7 @@ def cmd_new(args):
     (folder / "README.md").write_text(fill((TEMPLATES / "common" / "README.md").read_text(encoding="utf-8")),
                                       encoding="utf-8", newline="\n")
     info = {"id": args.team, "title": args.title or "", "title_en": args.title_en or "",
-            "members": [{"name": "", "student_id": "", "github": ""}, {"name": "", "student_id": "", "github": ""}],
-            "ai_tools": ""}
+            "members": [{"name": "", "student_id": "", "github": ""}, {"name": "", "student_id": "", "github": ""}]}
     (folder / "team.json").write_text(json.dumps(info, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     say(paint(f"created teams/{args.team}", "32"))
     say(f"  next: fill in teams/{args.team}/team.json, then  {ME} run {args.team}")

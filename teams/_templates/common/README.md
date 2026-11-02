@@ -33,7 +33,3 @@ This folder belongs to your team alone. Do not change anything outside
 ## Sources and licences
 
 List every image or file you did not make yourselves, with its address and licence.
-
-## Use of AI tools
-
-The course allows AI tools if you say how you used them. Describe where and how.

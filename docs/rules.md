@@ -147,7 +147,7 @@ with a warning. Keep the gate clear (see above).
 - `extras/` is outside the city build: the rules above do not apply there,
   and nothing in it is graded.
 - `README.md` lists every image or file you did not make yourselves, with its
-  source and licence, and says how you used AI tools.
+  source and licence.
 
 ## Mistakes the city forgives
 

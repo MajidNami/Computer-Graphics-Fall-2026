@@ -15,5 +15,5 @@
 
 - [ ] `python3 tools/citylab.py check teamNN` passes on our computer.
 - [ ] Only files in `teams/teamNN/` are changed.
-- [ ] Our README lists image sources and how we used AI tools.
+- [ ] Our README lists the source and licence of every image or file we did not make ourselves.
 - [ ] The same version is uploaded to Courses (`python3 tools/citylab.py pack teamNN --phase N`).
