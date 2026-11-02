@@ -38,10 +38,18 @@ private:
     static constexpr float kHiccupMin = 0.03f;  // ... if it is also longer than 30 ms
     static constexpr float kFollow = 0.25f;     // how fast the step follows the frames
 
+    // The middle of the frames kept so far. An insertion sort of at most eight
+    // numbers: as fast as std::sort here, and GCC 15 cannot mistake it for an
+    // access out of bounds (it does with std::sort on a std::array).
     float median() const {
         std::array<float, kHistory> sorted = history_;
         const std::size_t n = static_cast<std::size_t>(std::clamp(count_, 1, kHistory));
-        std::sort(sorted.begin(), sorted.begin() + static_cast<std::ptrdiff_t>(n));
+        for (std::size_t i = 1; i < n; ++i) {
+            const float value = sorted[i];
+            std::size_t j = i;
+            for (; j > 0 && sorted[j - 1] > value; --j) sorted[j] = sorted[j - 1];
+            sorted[j] = value;
+        }
         return sorted[n / 2];
     }
 
