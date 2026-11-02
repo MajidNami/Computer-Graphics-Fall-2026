@@ -606,8 +606,16 @@ folder, create your folder from the template and run it:
 The template draws a small house with a lawn and a weather vane that turns
 when you press **V**. Replace it with your own project.
 
-Then fill in `teams/team07/team.json`. The titles are already your topic's;
-change them if your place has a name of its own:
+You can start before the staff have added your team to `city/registry.json`.
+Until then your zone runs on a free plot (the terminal says which one), and
+`check` gives two warnings that are expected: `registered` (not in the
+registry yet) and `names on the sign` (the titles are empty). Both go away
+once your team is registered and `team.json` is filled in.
+
+Then fill in `teams/team07/team.json`. If your team was registered when you
+ran `new`, the titles are already your topic's; otherwise write them yourself
+(the Persian and English names of every topic are in `city/places.json`).
+Change them if your place has a name of its own:
 
 ```json
 {
