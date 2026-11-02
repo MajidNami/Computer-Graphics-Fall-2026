@@ -1,0 +1,37 @@
+name: Propose a new topic
+description: A topic that is not in city/places.json yet but your team would like to build
+title: "[topic] "
+labels: [place]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Name (English and Persian)
+      placeholder: Skate park / پارک اسکیت
+    validations:
+      required: true
+  - type: dropdown
+    id: district
+    attributes:
+      label: Which district fits it?
+      options: [Culture & Education, Business & Shopping, Sports & Leisure, Transport, City Services, Energy & Industry]
+    validations:
+      required: true
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size
+      options: [One plot (80 x 100 m), Two plots (160 x 100 m)]
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea, phase by phase
+      description: >
+        What will you model in phase 1, what will move in phase 2 (a pivot, a
+        Bézier path, a moving hierarchy) and what will lights and textures add
+        in phase 3? Plots are up to 40 m high and may go 5 m below ground. The
+        topic must be big enough for a whole team project.
+    validations:
+      required: true

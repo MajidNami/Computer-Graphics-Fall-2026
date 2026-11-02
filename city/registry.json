@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "about": "Which team builds which topic. Staff-only (CODEOWNERS). A team's topic ('place', an id from city/places.json) decides its plot; 'plot' may name a free plot directly instead. GitHub logins here decide which folder a pull request may change.",
+  "staff": ["MajidNami"],
+  "teams": []
+}

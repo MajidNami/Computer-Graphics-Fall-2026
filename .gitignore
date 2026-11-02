@@ -1,0 +1,24 @@
+# Build output
+/build/
+/build-*/
+/out/
+/dist/
+CMakeUserPresets.json
+
+# Editors and systems
+.vs/
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# The Python helper scripts in tools/
+__pycache__/
+*.pyc
+
+# Screenshots taken with F12 in the running city
+/screenshots/
+
+# The viewer's own settings (mouse, field of view, speeds)
+/settings.json

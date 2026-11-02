@@ -1,0 +1,35 @@
+# Staff code must build on the three systems students use. Runs only when
+# the city itself changes, so team pull requests stay fast.
+name: Platforms
+
+on:
+  pull_request:
+    paths: ["core/**", "sdk/**", "cmake/**", "CMakeLists.txt", ".github/workflows/platforms.yml"]
+  push:
+    branches: [main]
+    paths: ["core/**", "sdk/**", "cmake/**", "CMakeLists.txt", ".github/workflows/platforms.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OpenGL and X11 headers
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1-mesa-dev libx11-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: A team from the template, so the SDK is compiled as a team uses it
+        run: python tools/citylab.py new team99
+      - name: Configure (on Linux, warnings are errors for staff code)
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCITYLAB_TEAMS=team99 -DCITYLAB_WERROR=${{ runner.os == 'Linux' && 'ON' || 'OFF' }}
+      - name: Build
+        run: cmake --build build --config Release --parallel

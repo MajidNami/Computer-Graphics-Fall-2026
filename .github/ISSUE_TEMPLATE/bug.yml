@@ -1,0 +1,25 @@
+name: Bug in the city
+description: Something in the city or the tools (not in your own team's code) does not work
+title: "[bug] "
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what did you see?
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Terminal output
+      description: Paste the output of `python3 tools/citylab.py doctor` (Windows `py tools\citylab.py doctor`) and the first error message.
+      render: text
+  - type: input
+    id: system
+    attributes:
+      label: Operating system
+      placeholder: Windows 11 / macOS 14 / Ubuntu 24.04
+    validations:
+      required: true

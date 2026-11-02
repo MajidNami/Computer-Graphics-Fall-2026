@@ -1,0 +1,86 @@
+# Runs on every pull request and on every push to main.
+#
+#   boundary  the pull request changes only its author's team folder
+#   lint      the project rules (classic OpenGL only, file types, size, ...)
+#   check     builds the city on Linux and runs  citylab --check  for every
+#             changed team; the report and screenshots are attached to the run
+#
+# Students: if a job is red, open it and read the first error; the same
+# commands run on your computer with  python3 tools/citylab.py lint|check teamNN.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  boundary:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Only your own team folder
+        run: >
+          python3 tools/citylab.py boundary
+          --base origin/${{ github.base_ref }}
+          --author ${{ github.event.pull_request.user.login }}
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Project rules
+        run: python3 tools/citylab.py lint
+
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install OpenGL, X11 and a virtual display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake g++ libgl1-mesa-dev libx11-dev libgl1-mesa-dri xvfb
+      - name: Which teams changed
+        id: teams
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            changed=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | sed -n 's#^teams/\(team[0-9][0-9]\)/.*#\1#p' | sort -u)
+            city=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -v '^teams/' || true)
+          else
+            changed=""
+            city="push"
+          fi
+          if [ -n "$city" ]; then
+            changed=$(ls teams | grep -E '^team[0-9]{2}$' || true)   # the city changed: check every team
+          fi
+          echo "list=$(echo $changed)" >> "$GITHUB_OUTPUT"
+          echo "teams to check: $changed"
+      - name: Build
+        run: python3 tools/citylab.py build
+      - name: Check
+        if: steps.teams.outputs.list != ''
+        run: |
+          status=0
+          for team in ${{ steps.teams.outputs.list }}; do
+            python3 tools/citylab.py check "$team" --no-build || status=1
+          done
+          exit $status
+      - name: Keep the reports and screenshots
+        if: always() && steps.teams.outputs.list != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-reports
+          path: build/check/
+          if-no-files-found: ignore

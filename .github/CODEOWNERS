@@ -1,0 +1,19 @@
+# Who must review a pull request. The last matching line wins.
+#
+# The course staff review every change. Add the other TAs' GitHub logins on
+# the first line (e.g. "@MajidNami @ta-login-1 @ta-login-2"), or, once the
+# repository lives in a GitHub organization, a team such as "@ORG/tas".
+#
+# Teams do not need a line of their own: the CI "boundary" check already makes
+# sure a pull request only changes its author's folder (city/registry.json).
+
+*                   @MajidNami
+
+# The city itself: staff only.
+/core/              @MajidNami
+/sdk/               @MajidNami
+/city/              @MajidNami
+/cmake/             @MajidNami
+/tools/             @MajidNami
+/.github/           @MajidNami
+/CMakeLists.txt     @MajidNami

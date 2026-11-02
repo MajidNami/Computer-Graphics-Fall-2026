@@ -1,0 +1,696 @@
+{
+  "version": 2,
+  "about": "Catalogue of topics. Every topic is a whole project for a team of two and owns one plot of the city (\"plot\"); a team that picks the topic builds on that plot. \"lots\": 1 = 80 x 100 m, 2 = 160 x 100 m; plots are 40 m high and may go 5 m below ground. Teams send three preferences and every topic goes to one team. 'title' (Persian) and 'title_en' go on the signs. 'phases' (and 'phases_fa') suggest what each of the three phases could add: 1 modelling, 2 animation, 3 light and texture. They are starting points, not requirements. 'motion' names, for each of the three kinds of motion that phase 2 asks for (a rotation about an off-centre pivot, a motion along a Bezier path, a moving hierarchy), one idea that fits the topic, so that no topic leaves a team without a way to show one of them; tools/staff/check_places.py makes sure every topic has all three. tools/staff/gen_layout.py reads this file.",
+  "places": [
+    {
+      "id": "observatory",
+      "district": "culture",
+      "plot": "CU-1",
+      "lots": 1,
+      "title": "رصدخانه و سیاره‌نما",
+      "title_en": "Observatory & Planetarium",
+      "phases": [
+        "A telescope hall under a dome (the dome is your own mesh, built vertex by vertex), a planetarium hall, a visitor terrace with steps and a ramp",
+        "A dome slit that opens with an easing at dusk and closes at dawn, a telescope on a two-joint mount (turn about the vertical axis, then tilt) that follows a star, a shooting star on a Bezier path at night, a hinged shutter on the terrace door",
+        "A red night light on the terrace, a spot light that shines out of the dome slit, a glowing planetarium dome, a starry texture with GL_REPEAT, polished brass and white painted metal"
+      ],
+      "phases_fa": [
+        "سالن تلسکوپ زیر گنبد (گنبد مش خودتان است و رأس‌به‌رأس ساخته می‌شود)، سالن سیاره‌نما، تراس بازدید با پله و رمپ",
+        "شکاف گنبد که غروب با easing باز و صبح بسته می‌شود، تلسکوپ روی پایه‌ی دومفصلی (چرخش حول محور عمودی، سپس شیب) که ستاره را دنبال می‌کند، شهاب در شب روی مسیر بزیه، کرکره‌ی لولادار در تراس",
+        "چراغ قرمز شبانه‌ی تراس، نورافکنی که از شکاف گنبد بیرون می‌تابد، گنبد درخشان سیاره‌نما، بافت پرستاره با GL_REPEAT، برنج صیقلی و فلز رنگ‌شده‌ی سفید"
+      ],
+      "motion": {
+        "pivot": "dome shutter hinged at its edge",
+        "path": "a shooting star at night",
+        "hierarchy": "telescope: mount, then tube (two joints)"
+      }
+    },
+    {
+      "id": "science-museum",
+      "district": "culture",
+      "plot": "CU-2",
+      "lots": 1,
+      "title": "موزه‌ی علوم",
+      "title_en": "Science Museum",
+      "phases": [
+        "A main hall with a dome or a tilted roof, an outdoor science garden, a rocket model built from your own meshes",
+        "A planet model on hierarchical orbits, a Foucault pendulum, a rocket that lifts off on a Bezier path",
+        "Spotlights on the exhibits, a lit entrance canopy at night, textured posters and floors"
+      ],
+      "phases_fa": [
+        "سالن اصلی با گنبد یا بام شیب‌دار، باغ علم در فضای باز، مدل موشک با مش‌های خودتان",
+        "منظومه‌ی شمسی با مدارهای سلسله‌مراتبی، آونگ فوکو، موشکی که روی مسیر بزیه پرتاب می‌شود",
+        "نورافکن روی اشیای موزه، سایبان روشن ورودی در شب، پوستر و کف بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "Foucault pendulum",
+        "path": "rocket lift-off",
+        "hierarchy": "planets: sun, planet, moon"
+      }
+    },
+    {
+      "id": "library",
+      "district": "culture",
+      "plot": "CU-3",
+      "lots": 1,
+      "title": "کتابخانه‌ی عمومی",
+      "title_en": "Public Library",
+      "phases": [
+        "Stacked reading floors, repeated bookshelves, a reading garden with benches",
+        "Book carts moving between the shelves, an automatic door, a book return robot arm with two joints",
+        "Warm reading lamps at night, wooden and glass materials, an LED board with scrolling text (texture matrix)"
+      ],
+      "phases_fa": [
+        "طبقه‌های مطالعه روی هم، قفسه‌های تکراری، باغ مطالعه با نیمکت",
+        "چرخ‌دستی کتاب بین قفسه‌ها، در خودکار، بازوی دومفصلی برای برگشت کتاب",
+        "چراغ مطالعه‌ی گرم در شب، ماده‌ی چوب و شیشه، تابلوی LED با متن متحرک (ماتریس بافت)"
+      ],
+      "motion": {
+        "pivot": "automatic door",
+        "path": "book carts between the shelves",
+        "hierarchy": "return robot arm with two joints"
+      }
+    },
+    {
+      "id": "cinema",
+      "district": "culture",
+      "plot": "CU-4",
+      "lots": 1,
+      "title": "سینما",
+      "title_en": "Cinema Multiplex",
+      "phases": [
+        "A multiplex with several halls, rows of seats from one display list, an outdoor screen in a plaza",
+        "A film running on the screen, a ticket gate, a popcorn machine, curtains that open on a schedule, a limousine that arrives for the premiere on a Bezier path, a searchlight on a two-joint mount that sweeps the sky",
+        "A marquee that lights up at dusk, coloured spotlights, a textured screen and posters"
+      ],
+      "phases_fa": [
+        "سینمای چندسالنه، ردیف صندلی‌ها از یک display list، پرده‌ی روباز در میدان",
+        "فیلم در حال پخش روی پرده، گیت بلیت، دستگاه پاپ‌کورن، پرده‌ای که سر ساعت باز می‌شود، لیموزینی که برای شب افتتاحیه روی مسیر بزیه می‌رسد، نورافکنی روی پایه‌ی دومفصلی که آسمان را جارو می‌کند",
+        "تابلوی سردر که غروب روشن می‌شود، نورافکن‌های رنگی، پرده و پوستر بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "ticket barrier arm",
+        "path": "a limousine arriving for the premiere",
+        "hierarchy": "searchlight on a two-joint mount"
+      }
+    },
+    {
+      "id": "concert-hall",
+      "district": "culture",
+      "plot": "CU-5",
+      "lots": 1,
+      "title": "تالار موسیقی",
+      "title_en": "Concert Hall",
+      "phases": [
+        "A hall with a curved roof from a Bezier profile, a stage, an outdoor amphitheatre",
+        "A curtain that opens, an orchestra lift that rises, spotlights that sweep the stage, a follow spot that glides over the stage on a Bezier path, a lighting rig whose truss turns while its spot arms turn on it, a piano lid on a hinge",
+        "Stage spotlights at night, a shiny wooden stage, textured seats and walls"
+      ],
+      "phases_fa": [
+        "تالار با بام منحنی از یک منحنی بزیه، صحنه، آمفی‌تئاتر روباز",
+        "پرده‌ای که باز می‌شود، سکوی ارکستر که بالا می‌آید، نورافکن‌هایی که روی صحنه می‌چرخند، نورافکن دنبال‌کننده که روی مسیر بزیه در صحنه می‌لغزد، داربست نور که می‌چرخد و بازوهای نورافکنش روی آن می‌چرخند، در پیانو روی لولا",
+        "نورافکن صحنه در شب، صحنه‌ی چوبی براق، صندلی و دیوار بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "piano lid on its hinge",
+        "path": "a follow spot gliding over the stage",
+        "hierarchy": "lighting rig: truss, then spot arms"
+      }
+    },
+    {
+      "id": "art-gallery",
+      "district": "culture",
+      "plot": "CU-6",
+      "lots": 1,
+      "title": "گالری هنر",
+      "title_en": "Art Gallery",
+      "phases": [
+        "White gallery cubes, a sculpture garden, sculptures modelled vertex by vertex",
+        "A sculpture that turns slowly, a mobile hanging in the hall with several moving levels, doors that open in the morning, a guide drone that flies the visitors' route on a Bezier path",
+        "Picture lights at night, textured artworks, polished floor materials"
+      ],
+      "phases_fa": [
+        "مکعب‌های سفید گالری، باغ مجسمه، مجسمه‌هایی که رأس به رأس مدل می‌شوند",
+        "مجسمه‌ای که آرام می‌چرخد، موبایل آویزان با چند سطح متحرک، درهایی که صبح باز می‌شوند، پهپاد راهنما که مسیر بازدید را روی منحنی بزیه می‌پیماید",
+        "نور تابلوها در شب، آثار هنری بافت‌دار، کف براق"
+      ],
+      "motion": {
+        "pivot": "revolving gallery door",
+        "path": "a guide drone along the visitors' route",
+        "hierarchy": "hanging mobile with several levels"
+      }
+    },
+    {
+      "id": "office-tower",
+      "district": "commercial",
+      "plot": "CO-1",
+      "lots": 1,
+      "title": "برج اداری",
+      "title_en": "Office Tower",
+      "phases": [
+        "A glass tower up to 40 m with repeated floors, a lobby, a plaza with planters",
+        "A glass lift on the facade, a revolving door, a window-cleaning cradle that moves along the facade, a delivery drone that flies to the roof on a Bezier path",
+        "Windows that light up floor by floor at night, glass with strong specular highlights, a textured curtain wall"
+      ],
+      "phases_fa": [
+        "برج شیشه‌ای تا ۴۰ متر با طبقه‌های تکراری، لابی، میدان با گلدان",
+        "آسانسور شیشه‌ای روی نما، در گردان، سکوی شیشه‌شوی که روی نما حرکت می‌کند، پهپاد تحویل بسته که روی مسیر بزیه به بام می‌رود",
+        "پنجره‌هایی که شب طبقه به طبقه روشن می‌شوند، شیشه با بازتاب قوی، نمای پرده‌ی شیشه‌ای بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "lobby door on a hinge",
+        "path": "a delivery drone to the roof",
+        "hierarchy": "window cradle: boom, then cradle"
+      }
+    },
+    {
+      "id": "shopping-mall",
+      "district": "commercial",
+      "plot": "CO-2",
+      "lots": 1,
+      "title": "مرکز خرید",
+      "title_en": "Shopping Mall",
+      "phases": [
+        "A mall with an atrium and a skylight, shop fronts repeated from one display list, a parking deck",
+        "Escalators, a glass lift, shoppers walking on paths, sliding entrance doors, a hinged door on the car deck, a kinetic sculpture in the atrium (a hanging mobile with several turning levels)",
+        "Shop signs that light up at night, a textured floor and shop windows, a lit skylight"
+      ],
+      "phases_fa": [
+        "مرکز خرید با آتریوم و نورگیر، ویترین مغازه‌ها از یک display list، پارکینگ طبقاتی",
+        "پله‌برقی، آسانسور شیشه‌ای، خریداران روی مسیر، درهای کشویی ورودی، در لولادار طبقه‌ی پارکینگ، مجسمه‌ی جنبشی در آتریوم (آویزی با چند سطح چرخان)",
+        "تابلوهای مغازه که شب روشن می‌شوند، کف و ویترین بافت‌دار، نورگیر روشن"
+      ],
+      "motion": {
+        "pivot": "car-deck door on a hinge",
+        "path": "shoppers walking on paths",
+        "hierarchy": "kinetic sculpture in the atrium"
+      }
+    },
+    {
+      "id": "hotel",
+      "district": "commercial",
+      "plot": "CO-3",
+      "lots": 1,
+      "title": "هتل",
+      "title_en": "Hotel",
+      "phases": [
+        "A hotel with repeated balconies, a lobby with a canopy, a rooftop pool and garden",
+        "A revolving entrance door, a lift, a taxi that arrives on a Bezier path, umbrellas that open at noon, a rotating rooftop restaurant with a turning tray on it (two moving levels)",
+        "Rooms that light up at night, pool water with a moving texture, a lit hotel sign"
+      ],
+      "phases_fa": [
+        "هتل با بالکن‌های تکراری، لابی با سایبان، استخر و باغ روی بام",
+        "در گردان، آسانسور، تاکسی که روی مسیر بزیه می‌رسد، چترهایی که ظهر باز می‌شوند، رستوران گردان بام با سینی چرخان روی آن (دو سطح متحرک)",
+        "اتاق‌هایی که شب روشن می‌شوند، آب استخر با بافت متحرک، تابلوی روشن هتل"
+      ],
+      "motion": {
+        "pivot": "taxi door or umbrella ribs",
+        "path": "the taxi arriving",
+        "hierarchy": "rooftop restaurant: disc, then tray"
+      }
+    },
+    {
+      "id": "cafe-street",
+      "district": "commercial",
+      "plot": "CO-4",
+      "lots": 1,
+      "title": "خیابان کافه‌ها",
+      "title_en": "Café Street",
+      "phases": [
+        "A pedestrian street of cafés with terraces, repeated tables and chairs, a small fountain square",
+        "Umbrellas that open in the morning, a waiter on a path, steam from coffee machines, a fountain jet, a big coffee-cup sign that tips on its arm and pours (arm, then cup)",
+        "String lights at night, warm lamps on each terrace, textured paving and awnings"
+      ],
+      "phases_fa": [
+        "خیابان پیاده با کافه و تراس، میز و صندلی‌های تکراری، میدانچه با فواره",
+        "چترهایی که صبح باز می‌شوند، پیش‌خدمت روی مسیر، بخار دستگاه قهوه، فواره‌ی آب، تابلوی فنجان بزرگ که روی بازوی خود خم می‌شود و قهوه می‌ریزد (بازو، سپس فنجان)",
+        "ریسه‌ی چراغ در شب، چراغ گرم برای هر تراس، کف‌پوش و سایبان بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "umbrellas opening",
+        "path": "the waiter on a path",
+        "hierarchy": "coffee-cup sign: arm, then cup"
+      }
+    },
+    {
+      "id": "car-showroom",
+      "district": "commercial",
+      "plot": "CO-5",
+      "lots": 1,
+      "title": "نمایشگاه خودرو",
+      "title_en": "Car Showroom",
+      "phases": [
+        "A glass showroom, a service workshop, cars modelled hierarchically (body, wheels, doors)",
+        "Cars on turntables, a car lift in the workshop, a car that drives out on a Bezier path",
+        "Shiny car paint with strong specular highlights, spotlights in the showroom, textured floors"
+      ],
+      "phases_fa": [
+        "نمایشگاه شیشه‌ای، کارگاه تعمیر، خودروهای سلسله‌مراتبی (بدنه، چرخ، در)",
+        "خودرو روی صفحه‌ی گردان، بالابر کارگاه، خودرویی که روی مسیر بزیه بیرون می‌رود",
+        "رنگ براق خودرو با بازتاب قوی، نورافکن در نمایشگاه، کف بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "car doors and bonnet",
+        "path": "the car driving out",
+        "hierarchy": "turntable, car, wheels"
+      }
+    },
+    {
+      "id": "stadium",
+      "district": "sports",
+      "plot": "SP-1",
+      "lots": 2,
+      "title": "ورزشگاه فوتبال",
+      "title_en": "Football Stadium",
+      "phases": [
+        "Stands built from one repeated section, a pitch, entrance gates and a roof (two lots)",
+        "A ball on a Bezier path, players running, a scoreboard that follows the city clock, flags, turnstile arms at the gates",
+        "Floodlight towers that switch on at night, a textured pitch with GL_REPEAT, coloured seats"
+      ],
+      "phases_fa": [
+        "سکوها از یک بخش تکراری، زمین بازی، دروازه‌های ورودی و سقف (دو قطعه)",
+        "توپ روی مسیر بزیه، بازیکنان در حال دویدن، تابلوی امتیاز با ساعت شهر، پرچم‌ها، بازوی گردان گیت‌های ورودی",
+        "برج‌های نورافکن که شب روشن می‌شوند، چمن بافت‌دار با GL_REPEAT، صندلی‌های رنگی"
+      ],
+      "motion": {
+        "pivot": "turnstile arms",
+        "path": "the ball",
+        "hierarchy": "player: torso, arm, forearm"
+      }
+    },
+    {
+      "id": "amusement-park",
+      "district": "sports",
+      "plot": "SP-4",
+      "lots": 2,
+      "title": "شهربازی",
+      "title_en": "Amusement Park",
+      "phases": [
+        "Several rides, a ticket gate, food stalls and paths (two lots)",
+        "A Ferris wheel whose cabins stay level, a carousel, a small roller coaster on a closed track",
+        "Coloured lights on every ride at night, shiny painted metal, textured paths and signs"
+      ],
+      "phases_fa": [
+        "چند وسیله‌ی بازی، گیت بلیت، غرفه‌های غذا و مسیرها (دو قطعه)",
+        "چرخ‌وفلکی که کابین‌هایش صاف می‌مانند، چرخ‌وفلک اسبی، ترن کوچک روی مسیر بسته",
+        "چراغ‌های رنگی روی هر وسیله در شب، فلز رنگ‌شده‌ی براق، مسیر و تابلوی بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "ride gate",
+        "path": "roller coaster",
+        "hierarchy": "Ferris wheel: wheel, then cabins"
+      }
+    },
+    {
+      "id": "swimming-pool",
+      "district": "sports",
+      "plot": "SP-6",
+      "lots": 1,
+      "title": "مجموعه‌ی استخر",
+      "title_en": "Swimming Pool",
+      "phases": [
+        "An indoor hall and an outdoor pool (5 m below ground is allowed), a diving tower, changing rooms",
+        "Slides with swimmers on Bezier paths, a diving board that springs, umbrellas, a wave machine, a swing-arm pool hoist (arm, then seat)",
+        "Water with a moving texture, underwater lights at night, tiles with GL_REPEAT"
+      ],
+      "phases_fa": [
+        "سالن سرپوشیده و استخر روباز (تا ۵ متر زیر زمین مجاز است)، برج شیرجه، رختکن",
+        "سرسره با شناگر روی مسیر بزیه، تخته‌ی شیرجه که فنر می‌خورد، چترها، دستگاه موج، جرثقیل کوچک استخر با بازوی چرخان و صندلی آویزان (بازو، سپس صندلی)",
+        "آب با بافت متحرک، چراغ زیر آب در شب، کاشی با GL_REPEAT"
+      ],
+      "motion": {
+        "pivot": "diving board",
+        "path": "slides with swimmers",
+        "hierarchy": "pool hoist: arm, then seat"
+      }
+    },
+    {
+      "id": "railway-station",
+      "district": "transport",
+      "plot": "TR-1",
+      "lots": 2,
+      "title": "ایستگاه راه‌آهن",
+      "title_en": "Railway Station",
+      "phases": [
+        "A station hall, platforms under a long canopy, a footbridge (two lots, by the city tram line)",
+        "A train with several cars that brakes and leaves on time, a departure board with the city clock, barriers, every car on two bogies with turning wheels (car, bogie, wheel)",
+        "A lit canopy and platform lamps at night, a glass hall roof, textured tracks and platforms"
+      ],
+      "phases_fa": [
+        "سالن ایستگاه، سکوها زیر سایبان بلند، پل عابر (دو قطعه، کنار خط تراموای شهر)",
+        "قطار چندواگنی که سر وقت ترمز می‌کند و راه می‌افتد، تابلوی حرکت با ساعت شهر، راه‌بند، هر واگن روی دو بوژی با چرخ‌های گردان (واگن، بوژی، چرخ)",
+        "سایبان و چراغ سکوها در شب، سقف شیشه‌ای سالن، ریل و سکوی بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "level-crossing barrier",
+        "path": "the train",
+        "hierarchy": "car, bogie, wheel"
+      }
+    },
+    {
+      "id": "cable-car",
+      "district": "transport",
+      "plot": "TR-3",
+      "lots": 1,
+      "title": "تله‌کابین",
+      "title_en": "Cable Car Station",
+      "phases": [
+        "A station with a sloped glass roof (your own mesh), a line of pylons repeated from one display list, a boarding platform and a ticket hall",
+        "Cabins that glide along a Bezier-shaped cable and ease in and out of the station, cabin doors that swing on hinges when a cabin stops, a drive wheel with a turning arm; the line runs from 6:00 to 22:00",
+        "Lit cabins and platform lamps at night, a spot light from the station roof, a shiny steel cable and glass cabins, textured platform and ticket-hall floors"
+      ],
+      "phases_fa": [
+        "ایستگاه با سقف شیشه‌ای شیب‌دار (مش خودتان)، ردیفی از پایه‌ها از یک display list، سکوی سوارشدن و سالن بلیت",
+        "کابین‌هایی که روی کابلی با شکل منحنی بزیه می‌لغزند و نرم وارد ایستگاه می‌شوند و از آن بیرون می‌آیند، درهای کابین که هنگام ایستادن روی لولا باز می‌شوند، چرخ محرک با بازوی گردان؛ خط از ساعت ۶ تا ۲۲ کار می‌کند",
+        "کابین‌های روشن و چراغ‌های سکو در شب، نورافکن از سقف ایستگاه، کابل فولادی براق و کابین شیشه‌ای، کف بافت‌دار سکو و سالن بلیت"
+      ],
+      "motion": {
+        "pivot": "cabin doors hinged at one edge",
+        "path": "cabins along the cable, easing in the stations",
+        "hierarchy": "cabin on its hanger arm, swinging under the grip"
+      }
+    },
+    {
+      "id": "airport",
+      "district": "transport",
+      "plot": "TR-4",
+      "lots": 2,
+      "title": "فرودگاه",
+      "title_en": "Airport",
+      "phases": [
+        "A terminal, a control tower, an apron and a short runway towards the open land (two lots, city edge)",
+        "A plane landing on a Bezier path, a rotating radar, a boarding bridge that moves, baggage carts",
+        "Runway and apron lights at night, a glass terminal, textured runway markings"
+      ],
+      "phases_fa": [
+        "ترمینال، برج مراقبت، اپرون و باند کوتاه رو به زمین باز (دو قطعه، لبه‌ی شهر)",
+        "هواپیمایی که روی مسیر بزیه می‌نشیند، رادار گردان، پل مسافر که حرکت می‌کند، ارابه‌های بار",
+        "چراغ‌های باند و اپرون در شب، ترمینال شیشه‌ای، خط‌کشی بافت‌دار باند"
+      ],
+      "motion": {
+        "pivot": "cargo door",
+        "path": "the plane landing",
+        "hierarchy": "boarding bridge: two telescoping parts and the cabin"
+      }
+    },
+    {
+      "id": "bus-terminal",
+      "district": "transport",
+      "plot": "TR-6",
+      "lots": 1,
+      "title": "پایانه‌ی اتوبوس",
+      "title_en": "Bus Terminal",
+      "phases": [
+        "Platforms under a canopy, a waiting hall, buses modelled hierarchically",
+        "A bus with opening doors that arrives on a path, a departure board that follows the city clock, an articulated bus that bends at its joint (front body, joint, rear body), a barrier arm at the exit",
+        "A lit canopy at night, glass and metal materials, textured platform markings"
+      ],
+      "phases_fa": [
+        "سکوها زیر سایبان، سالن انتظار، اتوبوس‌های سلسله‌مراتبی",
+        "اتوبوسی با درهای بازشونده که روی مسیر می‌رسد، تابلوی حرکت با ساعت شهر، اتوبوس مفصل‌دار که در مفصل خود خم می‌شود (بدنه‌ی جلو، مفصل، بدنه‌ی عقب)، بازوی راه‌بند در خروجی",
+        "سایبان روشن در شب، ماده‌ی شیشه و فلز، خط‌کشی بافت‌دار سکوها"
+      ],
+      "motion": {
+        "pivot": "bus doors, exit barrier",
+        "path": "the bus into its bay",
+        "hierarchy": "articulated bus: front, joint, rear"
+      }
+    },
+    {
+      "id": "hospital",
+      "district": "services",
+      "plot": "SV-1",
+      "lots": 1,
+      "title": "بیمارستان",
+      "title_en": "Hospital",
+      "phases": [
+        "Hospital wings, a helipad on the roof, an ambulance bay, a garden for patients",
+        "A helicopter landing with turning rotors, an ambulance on a Bezier path, sliding doors, a barrier arm at the ambulance bay",
+        "A lit red cross at night, a flashing ambulance light, clean white and glass materials"
+      ],
+      "phases_fa": [
+        "بال‌های بیمارستان، بالگردنشین روی بام، محل آمبولانس، باغ بیماران",
+        "بالگردی که با ملخ گردان می‌نشیند، آمبولانس روی مسیر بزیه، درهای کشویی، بازوی راه‌بند ورودی آمبولانس",
+        "صلیب سرخ روشن در شب، چراغ گردان آمبولانس، ماده‌ی سفید و شیشه"
+      ],
+      "motion": {
+        "pivot": "ambulance-bay barrier",
+        "path": "ambulance and helicopter approach",
+        "hierarchy": "helicopter: body, rotor, blades"
+      }
+    },
+    {
+      "id": "fire-station",
+      "district": "services",
+      "plot": "SV-2",
+      "lots": 1,
+      "title": "آتش‌نشانی",
+      "title_en": "Fire Station",
+      "phases": [
+        "A station with garage bays, a training tower, fire engines modelled hierarchically",
+        "Rolling doors, a fire engine with a telescopic ladder (moving hierarchy), a hose with water, the engine drives out of the station on a Bezier path",
+        "A rotating red beacon at night, shiny red paint, textured walls and floor"
+      ],
+      "phases_fa": [
+        "ایستگاه با گاراژها، برج تمرین، خودروهای آتش‌نشانی سلسله‌مراتبی",
+        "درهای کرکره‌ای، نردبان تلسکوپی خودرو (سلسله‌مراتب متحرک)، شلنگ و آب، ماشین آتش‌نشانی که روی مسیر بزیه از ایستگاه بیرون می‌رود",
+        "چراغ گردان قرمز در شب، رنگ قرمز براق، دیوار و کف بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "bay door",
+        "path": "the engine driving out",
+        "hierarchy": "ladder: turntable, ladder, extension"
+      }
+    },
+    {
+      "id": "city-hall",
+      "district": "services",
+      "plot": "SV-3",
+      "lots": 1,
+      "title": "شهرداری و برج ساعت",
+      "title_en": "City Hall & Clock Tower",
+      "phases": [
+        "A town hall with an arcade of arches (your own mesh), a clock tower with a pyramid roof, a flag plaza with steps, columns repeated from one display list",
+        "Clock hands that turn about their hubs and show the city clock, a bell that swings in its frame, figures that parade along a Bezier path at noon, a flag that is raised in the morning",
+        "A floodlit tower and a lit clock face at night, a spot light on the flag, a textured clock face, stone and bronze materials"
+      ],
+      "phases_fa": [
+        "ساختمان شهرداری با رواق طاق‌دار (مش خودتان)، برج ساعت با سقف هرمی، میدان پرچم با پله، ستون‌های تکراری از یک display list",
+        "عقربه‌هایی که حول مرکز خود می‌چرخند و ساعت شهر را نشان می‌دهند، زنگی که در قاب خود نوسان می‌کند، عروسک‌هایی که ظهر روی مسیر بزیه رژه می‌روند، پرچمی که صبح بالا می‌رود",
+        "برج نورپردازی‌شده و صفحه‌ی ساعت روشن در شب، نورافکن روی پرچم، صفحه‌ی ساعت بافت‌دار، مصالح سنگ و برنز"
+      ],
+      "motion": {
+        "pivot": "clock hands about their hubs, driven by the city clock",
+        "path": "figures parading along a curve at noon",
+        "hierarchy": "bell: frame, then bell, then clapper"
+      }
+    },
+    {
+      "id": "fuel-station",
+      "district": "services",
+      "plot": "SV-4",
+      "lots": 1,
+      "title": "جایگاه سوخت و شارژ",
+      "title_en": "Fuel and EV Station",
+      "phases": [
+        "A canopy with pumps, a shop, a car wash and EV chargers",
+        "Car-wash brushes that turn, a car driving through on a path, a price board with changing digits, a barrier at the car wash that lifts, brush arms that swing (gantry, arm, brush)",
+        "A lit canopy at night, glowing chargers, textured price board and paving"
+      ],
+      "phases_fa": [
+        "سایبان و جایگاه‌ها، فروشگاه، کارواش و شارژر خودروی برقی",
+        "برس‌های چرخان کارواش، خودرویی که روی مسیر رد می‌شود، تابلوی قیمت با رقم‌های متغیر، راه‌بند کارواش که بالا می‌رود، بازوهای فرچه که نوسان می‌کنند (قاب، بازو، فرچه)",
+        "سایبان روشن در شب، شارژرهای روشن، تابلوی قیمت و کف بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "car-wash barrier",
+        "path": "the car through the wash",
+        "hierarchy": "brush arm: gantry, arm, brush"
+      }
+    },
+    {
+      "id": "logistics-hub",
+      "district": "services",
+      "plot": "SV-5",
+      "lots": 1,
+      "title": "مرکز لجستیک",
+      "title_en": "Logistics Hub",
+      "phases": [
+        "A warehouse with loading docks, racks repeated from one display list, trucks",
+        "Conveyor belts, delivery drones on Bezier paths, sliding loading doors, a forklift, dock levellers that tilt on hinges",
+        "Lit loading docks at night, metal and concrete materials, textured boxes"
+      ],
+      "phases_fa": [
+        "انبار با سکوهای بارگیری، قفسه‌ها از یک display list، کامیون‌ها",
+        "نوار نقاله، پهپادهای تحویل روی مسیر بزیه، درهای کشویی بارگیری، لیفتراک، رمپ‌های لولادار دوک بارگیری که شیب می‌گیرند",
+        "سکوهای بارگیری روشن در شب، ماده‌ی فلز و بتن، جعبه‌های بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "dock levellers",
+        "path": "delivery drones",
+        "hierarchy": "forklift: truck, mast, forks"
+      }
+    },
+    {
+      "id": "weather-station",
+      "district": "services",
+      "plot": "SV-6",
+      "lots": 1,
+      "title": "ایستگاه هواشناسی",
+      "title_en": "Weather Station",
+      "phases": [
+        "A control building with a sloped roof (your own mesh), a lattice radio mast repeated from one display list, a fenced instrument garden with a rain gauge and a wind-sock pole, a radar dome",
+        "A radar antenna that sweeps, a wind vane and an anemometer that follow the wind, a weather balloon that rises on a Bezier path with an easing and is released every day at noon, a dish that aims with two joints (turn, then tilt)",
+        "Red warning lights that blink on the mast at night, a spot light on the instrument garden, white painted metal and glass, a textured fence and ground"
+      ],
+      "phases_fa": [
+        "ساختمان کنترل با سقف شیب‌دار (مش خودتان)، دکل رادیویی خرپایی از یک display list، باغچه‌ی تجهیزات با نرده و بارانسنج و تیرک بادنما، گنبد رادار",
+        "آنتن رادار که جارو می‌کند، بادنما و بادسنج که از باد پیروی می‌کنند، بالن هواشناسی که هر روز ظهر رها می‌شود و روی مسیر بزیه با easing بالا می‌رود، بشقابی که با دو مفصل جهت می‌گیرد (چرخش، سپس شیب)",
+        "چراغ‌های هشدار قرمز چشمک‌زن دکل در شب، نورافکن روی باغچه‌ی تجهیزات، فلز رنگ‌شده‌ی سفید و شیشه، نرده و زمین بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "wind vane turning about the mast",
+        "path": "a weather balloon rising along a curve",
+        "hierarchy": "dish: turntable, then tilt, then feed arm"
+      }
+    },
+    {
+      "id": "solar-plant",
+      "district": "energy",
+      "plot": "EN-1",
+      "lots": 1,
+      "title": "نیروگاه خورشیدی",
+      "title_en": "Solar Power Plant",
+      "phases": [
+        "Rows of solar panels from one display list, a control building, a substation",
+        "Panels that track the shared sun (the sun direction from the frame), a cleaning robot on a path, a cleaning arm with two joints on the robot",
+        "Panels with specular highlights from the sun, security lights at night, textured panels"
+      ],
+      "phases_fa": [
+        "ردیف پنل‌های خورشیدی از یک display list، ساختمان کنترل، پست برق",
+        "پنل‌هایی که خورشید مشترک شهر را دنبال می‌کنند (جهت خورشید از frame)، ربات تمیزکار روی مسیر، بازوی دومفصلی پاک‌کننده روی ربات",
+        "بازتاب خورشید روی پنل‌ها، چراغ‌های امنیتی در شب، پنل بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "panels tilting to the sun",
+        "path": "the cleaning robot",
+        "hierarchy": "robot: base, arm, brush"
+      }
+    },
+    {
+      "id": "wind-farm",
+      "district": "energy",
+      "plot": "EN-2",
+      "lots": 1,
+      "title": "مزرعه‌ی بادی",
+      "title_en": "Wind Farm",
+      "phases": [
+        "Wind turbines of different sizes, a maintenance building, a visitor path",
+        "Blades that turn about their hubs (pivots), nacelles that turn into the wind, a maintenance lift, a service vehicle that drives the visitor path on a Bezier curve",
+        "Blinking red warning lights at night, white painted metal, a textured ground"
+      ],
+      "phases_fa": [
+        "توربین‌های بادی در اندازه‌های مختلف، ساختمان نگهداری، مسیر بازدید",
+        "پره‌هایی که حول توپی می‌چرخند (pivot)، ناسل‌هایی که رو به باد می‌چرخند، بالابر نگهداری، خودروی سرویس که مسیر بازدید را روی منحنی بزیه می‌پیماید",
+        "چراغ هشدار قرمز چشمک‌زن در شب، فلز رنگ سفید، زمین بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "nacelle turning into the wind",
+        "path": "a service vehicle on the visitor path",
+        "hierarchy": "tower, nacelle, rotor, blades"
+      }
+    },
+    {
+      "id": "water-treatment",
+      "district": "energy",
+      "plot": "EN-3",
+      "lots": 1,
+      "title": "تصفیه‌خانه‌ی آب",
+      "title_en": "Water Treatment Plant",
+      "phases": [
+        "Round settling tanks, pipes, a pump house and a control building",
+        "Rotating bridges over the tanks, pumps, water flowing through channels, an inspection boat that circles the basin on a Bezier path, a bridge with a scraper arm (bridge, then scraper)",
+        "Water with a moving texture, lit walkways at night, metal and concrete materials"
+      ],
+      "phases_fa": [
+        "مخزن‌های ته‌نشینی گرد، لوله‌ها، پمپ‌خانه و ساختمان کنترل",
+        "پل‌های گردان روی مخزن‌ها، پمپ‌ها، جریان آب در کانال‌ها، قایق بازرسی که روی مسیر بزیه دور حوضچه می‌گردد، پل گردان با بازوی لجن‌روب (پل، سپس لجن‌روب)",
+        "آب با بافت متحرک، راهروهای روشن در شب، ماده‌ی فلز و بتن"
+      ],
+      "motion": {
+        "pivot": "sluice gate",
+        "path": "an inspection boat circling the basin",
+        "hierarchy": "rotating bridge: bridge, then scraper"
+      }
+    },
+    {
+      "id": "car-factory",
+      "district": "energy",
+      "plot": "EN-4",
+      "lots": 1,
+      "title": "کارخانه‌ی خودرو",
+      "title_en": "Car Factory",
+      "phases": [
+        "A factory hall with an assembly line, a test track, a parking area for new cars",
+        "Robot arms with three joints on the line, a conveyor, a car on the test track on a Bezier path",
+        "Welding sparks and hall lights at night, shiny car paint, textured floor markings"
+      ],
+      "phases_fa": [
+        "سالن کارخانه با خط تولید، پیست آزمایش، پارکینگ خودروهای نو",
+        "بازوهای سه‌مفصلی روی خط، نوار نقاله، خودرو روی پیست با مسیر بزیه",
+        "جرقه‌ی جوش و چراغ سالن در شب، رنگ براق خودرو، خط‌کشی بافت‌دار کف"
+      ],
+      "motion": {
+        "pivot": "car doors on the line",
+        "path": "the car on the test track",
+        "hierarchy": "robot arm with three joints"
+      }
+    },
+    {
+      "id": "recycling-plant",
+      "district": "energy",
+      "plot": "EN-5",
+      "lots": 1,
+      "title": "بازیافت",
+      "title_en": "Recycling Plant",
+      "phases": [
+        "A sorting hall, coloured bins, a crusher, a visitor bridge",
+        "A crane with a grabber (moving hierarchy), a conveyor, a crusher that turns, a truck that tips, a truck that arrives on a Bezier path",
+        "Lights in the hall at night, coloured materials for each kind of waste, textured bales"
+      ],
+      "phases_fa": [
+        "سالن تفکیک، سطل‌های رنگی، خردکن، پل بازدید",
+        "جرثقیل با چنگک (سلسله‌مراتب متحرک)، نوار نقاله، خردکن گردان، کامیونی که خالی می‌کند، کامیونی که روی مسیر بزیه می‌رسد",
+        "چراغ سالن در شب، رنگ متفاوت برای هر نوع پسماند، بسته‌های بافت‌دار"
+      ],
+      "motion": {
+        "pivot": "tipping truck bed",
+        "path": "a truck arriving",
+        "hierarchy": "crane: boom, cable, grabber"
+      }
+    },
+    {
+      "id": "container-terminal",
+      "district": "energy",
+      "plot": "EN-6",
+      "lots": 1,
+      "title": "پایانه‌ی کانتینر",
+      "title_en": "Container Terminal",
+      "phases": [
+        "Stacks of containers from one display list, a gantry crane, a quay and offices",
+        "A gantry crane moving containers (moving hierarchy), trucks on paths, a ship that docks",
+        "Floodlights at night, textured containers in many colours, metal materials"
+      ],
+      "phases_fa": [
+        "ردیف کانتینرها از یک display list، جرثقیل دروازه‌ای، اسکله و دفتر",
+        "جرثقیل دروازه‌ای که کانتینر جابه‌جا می‌کند (سلسله‌مراتب متحرک)، کامیون روی مسیر، کشتی که پهلو می‌گیرد",
+        "نورافکن در شب، کانتینرهای بافت‌دار رنگارنگ، ماده‌ی فلزی"
+      ],
+      "motion": {
+        "pivot": "ship ramp",
+        "path": "the ship docking",
+        "hierarchy": "gantry crane: gantry, trolley, spreader"
+      }
+    }
+  ]
+}
