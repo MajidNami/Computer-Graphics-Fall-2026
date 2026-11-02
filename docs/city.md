@@ -184,16 +184,15 @@ your zone does not need to know about it.
 - **Trams.** Trams run both ways along the tram boulevard, keep to the right,
   stop at the traffic lights at every crossing and at five shelters along the
   park, and wait for a walker on the track.
-- **The park.** Lawns and paths, benches and lamps, a lake with five rowing
-  boats and pedalos, a fountain, and the tower, lit in colour at night.
+- **The park.** Lawns and paths, benches and lamps, a lake, a fountain, and
+  the tower, lit in colour at night.
 - **The streets.** Traffic lights at every crossing and a lamp every 36 m
   along the sidewalks, with room kept clear at every gate, crossing and tram
   stop.
-- **The skyline.** About 80 towers outside the city and hills in the
-  distance.
+- **Around the city.** Open fields, and hills in the distance.
 
-The city has no trees and no cars of its own: those are for the teams to
-model. It is light enough for an ordinary laptop, because it draws only what
+The city has no trees, cars, boats or buildings of its own (apart from the
+tower): those are for the teams to model. It is light enough for an ordinary laptop, because it draws only what
 you can see (what is behind you or beyond the fog is left out). None of this
 concerns your plot.
 

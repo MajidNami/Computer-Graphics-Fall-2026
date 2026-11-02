@@ -12,8 +12,8 @@ person.
 
 The city itself (the avenues, the trams, the central park with its lake and
 tower, the sky, the sun and the shared clock) is already built. Everything
-else, from the buildings to the trees and the cars, is modelled by the
-teams. Your team writes one C++ class, a **zone**, that draws your plot with
+else, from the buildings to the trees, the cars and the boats, is modelled
+by the teams. Your team writes one C++ class, a **zone**, that draws your plot with
 classic OpenGL. The city places it, lights it, keeps it inside its borders,
 and lets visitors walk into it.
 
@@ -742,7 +742,7 @@ Computer-Graphics-Fall-2026/
 ├── cmake/                  CMakeLists helpers (finding the team folders)
 ├── core/                   the city program (staff code)
 │   ├── app/                the program, the HUD, the automatic check
-│   ├── city/               the plan, streets, park, buildings, trams
+│   ├── city/               the plan, streets, park, tower, trams
 │   ├── engine/             camera, clock, sky, textures, settings
 │   ├── framework/          the window on Windows, Linux and macOS
 │   ├── zones/              runs each team's zone inside its plot

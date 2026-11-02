@@ -185,7 +185,6 @@ void CityScene::build(const Layout& layout, const Registry& registry, const std:
     buildSigns();
     chunks_.begin(Layer::Lights, true);
     buildTowerLights();
-    buildSkyline();
     buildLampsAndBenches();
     buildScatter();
     chunks_.end();
@@ -1027,8 +1026,6 @@ constexpr float kLayerDistance[kLayerCount] = {
     520.0f,  // Head
     360.0f,  // Globe
     1e9f,    // Lights
-    1e9f, 1e9f, 1e9f, 1e9f, 1e9f,  // Wall0 .. Wall4
-    1e9f,    // Roof
 };
 
 void CityScene::beginFrame(const Viewer& viewer) {
@@ -1098,33 +1095,6 @@ void CityScene::drawOpaque(const Environment& env, double time) const {
         glPopAttrib();
     }
     glPopAttrib();
-
-    // Skyline: facades with their tint, then (at night) the lit windows added
-    // on top of the same walls.
-    for (size_t look = 0; look < looks_.size(); ++look) {
-        const SkylineLook& s = looks_[look];
-        glBindTexture(GL_TEXTURE_2D, s.glass ? materials_.glass : materials_.panels);
-        glColor3f(s.tint.r, s.tint.g, s.tint.b);
-        draw(static_cast<Layer>(static_cast<int>(Layer::Wall0) + static_cast<int>(look)));
-    }
-    glBindTexture(GL_TEXTURE_2D, materials_.concrete);
-    glColor3f(0.75f, 0.76f, 0.78f);
-    draw(Layer::Roof);
-    if (env.lampLevel > 0.01f) {
-        glPushAttrib(GL_ENABLE_BIT | GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_FOG_BIT);
-        const GLfloat black[4] = {0, 0, 0, 1};
-        glFogfv(GL_FOG_COLOR, black);
-        glDisable(GL_LIGHTING);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE);
-        glDepthMask(GL_FALSE);
-        glDepthFunc(GL_LEQUAL);
-        glBindTexture(GL_TEXTURE_2D, materials_.litWindows);
-        const float k = env.lampLevel;
-        glColor3f(k, k, k);
-        for (int look = 0; look < 5; ++look) draw(static_cast<Layer>(static_cast<int>(Layer::Wall0) + look));
-        glPopAttrib();
-    }
 
     // Lamp heads and globes: emissive at night.
     glBindTexture(GL_TEXTURE_2D, materials_.plain);
@@ -1278,9 +1248,8 @@ std::vector<std::string> CityScene::statsLines() const {
     const Census& c = census_;
     const FrameStats& f = stats_;
     long all = 0;
-    static const char* const names[kLayerCount] = {"base",  "paint", "plaza", "detail", "shadow", "pool", "head",
-                                                  "globe", "lights", "wall0", "wall1",  "wall2",  "wall3", "wall4",
-                                                  "roof"};
+    static const char* const names[kLayerCount] = {"base", "paint", "plaza",  "detail", "shadow",
+                                                  "pool", "head",  "globe", "lights"};
     std::string layers = "chunks       ";
     for (int l = 0; l < kLayerCount; ++l) {
         const Layer layer = static_cast<Layer>(l);
@@ -1291,7 +1260,6 @@ std::vector<std::string> CityScene::statsLines() const {
     layers += "  (in view / in all)";
     return {"lamps        street " + std::to_string(c.streetLamps) + ", park " + std::to_string(c.parkLamps) +
                 ";  benches " + std::to_string(c.benches) + ", flower beds " + std::to_string(c.flowerBeds),
-            "skyline      " + std::to_string(c.skyline) + " buildings",
             layers,
             "scenery      " + std::to_string(f.chunksDrawn) + " of " + std::to_string(f.chunks) + " chunks drawn (" +
                 std::to_string(all) + " vertices in all the chunks), " + std::to_string(f.vertices) + " vertices"};

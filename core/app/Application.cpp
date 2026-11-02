@@ -615,7 +615,7 @@ void Application::reportBench(std::vector<double> ms, const std::vector<std::vec
     viewer.distance = std::min(kFar, fogVisibleDistance(env_));
     const long traffic = measureDrawing([&] { life_.draw(env_, viewer); }).vertices;
     const long effects = measureDrawing([&] { city_.drawTransparent(view_, env_, time_); }).vertices;
-    std::printf("  city vertices   %ld  (scenery %ld, sky %ld, traffic and boats %ld, water and lights %ld)\n",
+    std::printf("  city vertices   %ld  (scenery %ld, sky %ld, trams %ld, water and lights %ld)\n",
                 sky + opaque + traffic + effects, opaque, sky, traffic, effects);
     for (size_t i = 0; i < zoneMs.size() && i < zones_.size(); ++i) {
         double draw = 0.0, update = 0.0, drawMax = 0.0;

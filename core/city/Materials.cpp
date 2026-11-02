@@ -226,43 +226,6 @@ Image glassImage() {
     });
 }
 
-Image panelsImage() {
-    // White facade panels with deep-set windows, one per cell.
-    const Rgb panel{0.95f, 0.94f, 0.91f}, shade{0.80f, 0.80f, 0.79f}, glass{0.36f, 0.50f, 0.60f},
-        frame{0.30f, 0.32f, 0.35f};
-    return paint(256, [&](float u, float v, float&) {
-        float x = 0, y = 0;
-        int cx = 0, cy = 0;
-        facadeCell(u, v, x, y, cx, cy);
-        Rgb c = scale(panel, 0.95f + 0.05f * fbm(u * 16, v * 16, 3, 16, 12));
-        const bool window = x > 0.15f && x < 0.85f && y > 0.28f && y < 0.88f;
-        if (window) {
-            c = mix(glass, Rgb{0.70f, 0.82f, 0.90f}, (y - 0.28f) * 0.9f);
-            if (std::fabs(x - 0.5f) < 0.015f) c = frame;
-        } else if (x > 0.13f && x < 0.87f && y > 0.25f && y < 0.90f) {
-            c = frame;
-        } else if (y < 0.06f) {
-            c = shade;  // the floor slab line
-        }
-        return c;
-    });
-}
-
-Image litWindowsImage() {
-    // The night mask of the facade grid: some windows are lit (warm or cool
-    // white), the rest stay black. Drawn additively over the facades.
-    return paint(256, [&](float u, float v, float&) {
-        float x = 0, y = 0;
-        int cx = 0, cy = 0;
-        facadeCell(u, v, x, y, cx, cy);
-        const bool window = x > 0.15f && x < 0.85f && y > 0.28f && y < 0.88f;
-        const float on = hash(cx, cy, 77);
-        if (!window || on < 0.45f) return Rgb{0, 0, 0};
-        const Rgb warm{1.0f, 0.78f, 0.45f}, cool{0.80f, 0.88f, 1.0f};
-        return scale(mix(warm, cool, hash(cx, cy, 5) > 0.7f ? 1.0f : 0.0f), 0.55f + 0.45f * hash(cx, cy, 9));
-    });
-}
-
 Image plainImage() {
     // Almost white with a trace of noise: painted metal, plastic, signs.
     return paint(64, [&](float u, float v, float&) {
@@ -349,8 +312,6 @@ void Materials::build() {
     parkPath = uploadTexture(parkPathImage());
     concrete = uploadTexture(concreteImage());
     glass = uploadTexture(glassImage());
-    panels = uploadTexture(panelsImage());
-    litWindows = uploadTexture(litWindowsImage());
     plain = uploadTexture(plainImage());
     water = uploadTexture(waterImage());
     soil = uploadTexture(soilImage());

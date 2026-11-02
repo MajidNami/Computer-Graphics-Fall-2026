@@ -1,6 +1,6 @@
 // The built parts of the city: the tower in the park, the gate and frontage
-// of every plot, district signs, bus shelters and the skyline around the
-// city. All of it is compiled once into display lists by CityScene::build().
+// of every plot, district signs and bus shelters. All of it is compiled once
+// into display lists by CityScene::build().
 //
 // Every piece is modelled in its own local frame (GroundFrame), so one piece
 // of code serves all four directions: the gate of a north-facing plot is the
@@ -11,10 +11,8 @@
 
 #include "citylab/Shapes.h"
 #include "city/CityScene.h"
-#include "city/Density.h"
 #include "city/Frame.h"
 #include "city/Geometry.h"
-#include "city/Procedural.h"
 #include "engine/Collision.h"
 
 namespace citylab {
@@ -46,26 +44,6 @@ private:
     GroundFrame frame_;
     CollisionWorld& collisions_;
 };
-
-// Four walls of a box from y = 0 to `height`, without top or bottom, with
-// the same world-space UVs as geom::block so facade grids line up.
-void walls(const Rect& r, float height) {
-    const float uv = kFacadeUv, x0 = r.x0, x1 = r.x1, z0 = r.z0, z1 = r.z1, y1 = height;
-    glBegin(GL_QUADS);
-    glNormal3f(0, 0, 1);
-    glTexCoord2f(x0 * uv, 0); glVertex3f(x0, 0, z1); glTexCoord2f(x1 * uv, 0); glVertex3f(x1, 0, z1);
-    glTexCoord2f(x1 * uv, y1 * uv); glVertex3f(x1, y1, z1); glTexCoord2f(x0 * uv, y1 * uv); glVertex3f(x0, y1, z1);
-    glNormal3f(0, 0, -1);
-    glTexCoord2f(-x1 * uv, 0); glVertex3f(x1, 0, z0); glTexCoord2f(-x0 * uv, 0); glVertex3f(x0, 0, z0);
-    glTexCoord2f(-x0 * uv, y1 * uv); glVertex3f(x0, y1, z0); glTexCoord2f(-x1 * uv, y1 * uv); glVertex3f(x1, y1, z0);
-    glNormal3f(1, 0, 0);
-    glTexCoord2f(-z1 * uv, 0); glVertex3f(x1, 0, z1); glTexCoord2f(-z0 * uv, 0); glVertex3f(x1, 0, z0);
-    glTexCoord2f(-z0 * uv, y1 * uv); glVertex3f(x1, y1, z0); glTexCoord2f(-z1 * uv, y1 * uv); glVertex3f(x1, y1, z1);
-    glNormal3f(-1, 0, 0);
-    glTexCoord2f(z0 * uv, 0); glVertex3f(x0, 0, z0); glTexCoord2f(z1 * uv, 0); glVertex3f(x0, 0, z1);
-    glTexCoord2f(z1 * uv, y1 * uv); glVertex3f(x0, y1, z1); glTexCoord2f(z0 * uv, y1 * uv); glVertex3f(x0, y1, z0);
-    glEnd();
-}
 
 }  // namespace
 
@@ -259,70 +237,6 @@ void CityScene::buildPlotFrames(const Registry& registry) {
         glTranslatef(0.0f, 4.45f, zc + 0.12f);
         signBoard(signs_["plot-" + p.id], 7.2f, 1.8f);
         glPopMatrix();
-    }
-}
-
-// --------------------------------------------------------------------------
-// Skyline
-// --------------------------------------------------------------------------
-
-void CityScene::buildSkyline() {
-    // Modern towers and slabs around the city, so it reads as the new
-    // quarter of a large city rather than an island. Walls are sorted by
-    // look into geometry-only chunks (see SkylineLook); roofs are chunks of
-    // their own. Every building is a chunk, so those behind you are skipped.
-    const Layout& L = *layout_;
-    struct Look {
-        bool glass;
-        glm::vec3 tint;
-    };
-    const Look looks[] = {{true, {0.86f, 0.95f, 1.0f}}, {true, {0.80f, 1.0f, 0.93f}}, {false, {1.0f, 1.0f, 1.0f}},
-                          {false, {1.0f, 0.86f, 0.74f}}, {false, {0.84f, 0.92f, 1.0f}}};
-    struct Building {
-        Rect r;
-        float height;
-        int look;
-    };
-    std::vector<Building> buildings;
-    procedural::Random rng(1405);
-    const Rect inner = L.city.grown(density::kSkylineInner);
-    const Rect outer = inner.grown(density::kSkylineDepth);
-    for (int attempt = 0; attempt < 6000 && static_cast<int>(buildings.size()) < density::kSkylineBuildings; ++attempt) {
-        const float x = rng.range(outer.x0, outer.x1), z = rng.range(outer.z0, outer.z1);
-        if (inner.contains(x, z)) continue;
-        const float w = rng.range(18.0f, 42.0f), d = rng.range(18.0f, 42.0f);
-        const Rect r{x - w * 0.5f, x + w * 0.5f, z - d * 0.5f, z + d * 0.5f};
-        if (r.overlaps(inner)) continue;
-        if (std::any_of(exits_.begin(), exits_.end(), [&](const Rect& e) { return e.grown(12.0f).overlaps(r); })) continue;
-        if (std::any_of(buildings.begin(), buildings.end(), [&](const Building& b) { return b.r.grown(density::kSkylineGap).overlaps(r); }))
-            continue;
-        // Taller further out, so the skyline rises behind the city.
-        const float dx = std::max({inner.x0 - x, x - inner.x1, 0.0f}), dz = std::max({inner.z0 - z, z - inner.z1, 0.0f});
-        const float outward = std::clamp(std::max(dx, dz) / density::kSkylineDepth, 0.0f, 1.0f);
-        const float floors = std::round((24.0f + 110.0f * std::pow(rng.uniform(), 1.7f) * (0.35f + 0.65f * outward)) / 3.0f);
-        buildings.push_back({r, floors * 3.0f, static_cast<int>(rng.uniform() * 5.0f) % 5});
-    }
-    census_.skyline = static_cast<int>(buildings.size());
-    for (int look = 0; look < 5; ++look) {
-        SkylineLook s;
-        s.glass = looks[look].glass;
-        s.tint = looks[look].tint;
-        looks_.push_back(s);
-        chunks_.begin(static_cast<Layer>(static_cast<int>(Layer::Wall0) + look), true);
-        for (const Building& b : buildings) {
-            if (b.look != look) continue;
-            walls(b.r, b.height);
-            chunks_.next();
-        }
-    }
-    chunks_.begin(Layer::Roof, true);
-    for (const Building& b : buildings) {
-        geom::ground(b.r, b.height, 0.25f);
-        const glm::vec2 c = b.r.center();
-        const float w = b.r.width() * 0.3f, d = b.r.depth() * 0.3f;
-        geom::block({c.x - w, b.height, c.y - d}, {c.x + w, b.height + 3.0f, c.y + d}, 0.25f);  // plant room
-        solid({b.r.x0, 0.0f, b.r.z0}, {b.r.x1, b.height, b.r.z1});
-        chunks_.next();
     }
 }
 

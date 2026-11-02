@@ -24,8 +24,6 @@ enum class Layer {
     Head,    // the glowing heads of the street lamps
     Globe,   // the glowing globes of the park lamps
     Lights,  // the rings of light on the tower
-    Wall0, Wall1, Wall2, Wall3, Wall4,  // skyline walls, by look
-    Roof,
     Count
 };
 constexpr int kLayerCount = static_cast<int>(Layer::Count);

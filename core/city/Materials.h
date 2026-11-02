@@ -19,8 +19,6 @@ struct Materials {
     GLuint parkPath = 0;    // sand-coloured park paths, 4 m
     GLuint concrete = 0;    // smooth concrete with panel joints, 4 m
     GLuint glass = 0;       // curtain wall, 12 m (4 x 4 storeys of 3 m)
-    GLuint panels = 0;      // white panels with windows, same grid as glass
-    GLuint litWindows = 0;  // night mask of the same grid, drawn additively
     GLuint plain = 0;       // near white: painted metal, plastic, markings
     GLuint water = 0;       // ripples, 8 m; scrolled with the texture matrix
     GLuint soil = 0;        // building sites, 4 m

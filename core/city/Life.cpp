@@ -4,14 +4,12 @@
 #include <cmath>
 
 #include "citylab/Shapes.h"
-#include "city/Density.h"
 #include "city/Geometry.h"
 
 namespace citylab {
 namespace {
 
 constexpr float kPi = 3.14159265f;
-constexpr float kLakeY = -0.3f;          // the lake's surface (CityScene)
 constexpr float kTramLength = 27.0f;
 constexpr float kSignalCycle = 36.0f;    // seconds: along x green, amber, all red, then along z
 
@@ -25,19 +23,13 @@ void emission(float r, float g, float b) {
 }  // namespace
 
 // --------------------------------------------------------------------------
-// Tram tracks, trams and boats
+// Tram tracks and trams
 // --------------------------------------------------------------------------
 
 void CityLife::build(const Layout& L) {
     layout_ = &L;
     junctions_ = L.junctions();
     tracks_.clear();
-    boats_.clear();
-    unsigned seed = 1234u;
-    auto random = [&seed](float a, float b) {
-        seed = seed * 1664525u + 1013904223u;
-        return a + (b - a) * static_cast<float>((seed >> 8) & 0xFFFFu) / 65535.0f;
-    };
 
     const Rect& c = L.city;
     const float reach = Layout::kExitLength;
@@ -85,16 +77,6 @@ void CityLife::build(const Layout& L) {
         }
     }
 
-    // Boats on the lake, each on its own ring so they never meet.
-    for (int k = 0; k < density::kBoats; ++k) {
-        Boat boat;
-        boat.radius = L.lakeRadius * (0.3f + 0.7f * static_cast<float>(k) / static_cast<float>(density::kBoats));
-        boat.angle = random(0.0f, 2.0f * kPi);
-        boat.speed = random(0.025f, 0.05f) * (k % 2 ? -1.0f : 1.0f);  // radians per second
-        boat.phase = random(0.0f, 6.0f);
-        boat.pedalo = k % 3 == 1;
-        boats_.push_back(boat);
-    }
     buildModels();
 }
 
@@ -106,10 +88,8 @@ CityLife::Light CityLife::light(bool alongX) const {
 
 void CityLife::update(float dt, const glm::vec3& walker, bool onFoot) {
     if (!layout_) return;
-    time_ += dt;
     signalClock_ += dt;
     for (Track& track : tracks_) advance(track, dt, walker, onFoot);
-    for (Boat& boat : boats_) boat.angle += boat.speed * dt;
 }
 
 // Every tram drives as fast as it may: its top speed, but never so fast that
@@ -180,8 +160,6 @@ void CityLife::buildModels() {
     if (!tram_) {
         tram_ = glGenLists(1);
         tramLights_ = glGenLists(1);
-        rowingBoat_ = glGenLists(1);
-        pedalo_ = glGenLists(1);
         for (size_t j = 0; j < junctions_.size(); ++j) signalPoles_.push_back(glGenLists(1));
     }
 
@@ -224,29 +202,6 @@ void CityLife::buildModels() {
     for (const float x : {-0.8f, 0.8f})
         geom::block({x - 0.15f, 0.7f, -kTramLength - 0.02f}, {x + 0.15f, 0.9f, -kTramLength}, 0.0f);
     emission(0.0f, 0.0f, 0.0f);
-    glEndList();
-
-    glNewList(rowingBoat_, GL_COMPILE);
-    color(0.55f, 0.36f, 0.22f);
-    geom::block({-0.65f, -0.25f, -3.0f}, {0.65f, 0.25f, -0.4f}, 0.0f);
-    geom::block({-0.35f, -0.15f, -0.4f}, {0.35f, 0.25f, 0.0f}, 0.0f);  // the bow
-    color(0.92f, 0.90f, 0.84f);
-    geom::block({-0.7f, 0.25f, -3.0f}, {0.7f, 0.3f, -0.4f}, 0.0f);     // gunwale
-    color(0.40f, 0.26f, 0.16f);
-    for (const float z : {-2.3f, -1.3f}) geom::block({-0.6f, 0.3f, z - 0.15f}, {0.6f, 0.36f, z + 0.15f}, 0.0f);
-    glEndList();
-
-    glNewList(pedalo_, GL_COMPILE);
-    color(0.95f, 0.95f, 0.93f);
-    for (const float x : {-0.6f, 0.6f}) geom::block({x - 0.3f, -0.25f, -2.6f}, {x + 0.3f, 0.3f, 0.0f}, 0.0f);
-    geom::block({-0.6f, 0.3f, -2.3f}, {0.6f, 0.5f, -0.6f}, 0.0f);
-    color(0.25f, 0.55f, 0.85f);
-    geom::block({-0.55f, 0.5f, -1.9f}, {0.55f, 0.75f, -1.1f}, 0.0f);   // seats
-    color(1.0f, 0.78f, 0.15f);
-    geom::block({-0.75f, 1.6f, -2.3f}, {0.75f, 1.68f, -0.7f}, 0.0f);   // canopy
-    color(0.85f, 0.85f, 0.85f);
-    for (const float x : {-0.7f, 0.7f})
-        for (const float z : {-2.2f, -0.8f}) geom::block({x - 0.03f, 0.5f, z - 0.03f}, {x + 0.03f, 1.6f, z + 0.03f}, 0.0f);
     glEndList();
 
     // One signal for each way into every junction, on the right-hand corner
@@ -309,8 +264,8 @@ void CityLife::drawSignals(const Environment& env, const Viewer& viewer) const {
 std::vector<std::string> CityLife::statsLines() const {
     int trams = 0;
     for (const Track& track : tracks_) trams += static_cast<int>(track.trams.size());
-    return {"life         " + std::to_string(trams) + " trams, " + std::to_string(boats_.size()) +
-            " boats;  drawn last frame: " + std::to_string(tramsDrawn_) + " trams"};
+    return {"life         " + std::to_string(trams) + " trams;  drawn last frame: " + std::to_string(tramsDrawn_) +
+            " trams"};
 }
 
 void CityLife::draw(const Environment& env, const Viewer& view) const {
@@ -338,22 +293,6 @@ void CityLife::draw(const Environment& env, const Viewer& view) const {
             glPopMatrix();
             ++tramsDrawn_;
         }
-    }
-    // Boats go round the lake and rock a little on the water.
-    const bool lakeInView = glm::length(glm::vec3(layout_->lake.x, 0.0f, layout_->lake.y) - view.eye) < 600.0f &&
-                            view.frustum.sphere({layout_->lake.x, 0.0f, layout_->lake.y}, layout_->lakeRadius.x + 5.0f);
-    for (const Boat& b : boats_) {
-        if (!lakeInView) break;
-        const glm::vec2 p = layout_->lake + glm::vec2(std::cos(b.angle) * b.radius.x, std::sin(b.angle) * b.radius.y);
-        const glm::vec2 heading = glm::vec2(-std::sin(b.angle) * b.radius.x, std::cos(b.angle) * b.radius.y) *
-                                  (b.speed < 0.0f ? -1.0f : 1.0f);
-        glPushMatrix();
-        glTranslatef(p.x, kLakeY + 0.04f * std::sin(time_ * 1.4f + b.phase), p.y);
-        glRotatef(glm::degrees(std::atan2(heading.x, heading.y)), 0.0f, 1.0f, 0.0f);
-        glRotatef(2.0f * std::sin(time_ * 0.9f + b.phase), 0.0f, 0.0f, 1.0f);
-        glTranslatef(0.0f, 0.0f, 1.5f);  // the models' front is at z = 0; turn about the middle
-        glCallList(b.pedalo ? pedalo_ : rowingBoat_);
-        glPopMatrix();
     }
 }
 

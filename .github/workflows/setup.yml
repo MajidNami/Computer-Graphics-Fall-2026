@@ -1,0 +1,119 @@
+# The setup steps of README.md, run on Windows, Linux and macOS exactly as a
+# student types them, so that a change to the tools or the build never breaks
+# them unnoticed. Each step is one command of the README.
+name: Setup
+
+on:
+  pull_request:
+    paths: ["core/**", "sdk/**", "cmake/**", "tools/**", "teams/_templates/**", "CMakeLists.txt", "CMakePresets.json",
+            "README.md", ".github/workflows/setup.yml"]
+  push:
+    branches: [main]
+    paths: ["core/**", "sdk/**", "cmake/**", "tools/**", "teams/_templates/**", "CMakeLists.txt", "CMakePresets.json",
+            "README.md", ".github/workflows/setup.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      # Method 1, step 5 (the runner has Visual Studio with the C++ workload)
+      - name: doctor
+        run: python tools\citylab.py doctor
+      # Method 1, step 6 (the window is closed by itself after 60 frames)
+      - name: run
+        run: python tools\citylab.py run --time 21:30 --screenshot city.png --frames 60
+      - name: the window showed the city
+        run: |
+          $size = (Get-Item city.png).Length
+          Write-Output "screenshot: $size bytes"
+          if ($size -lt 50000) { throw "the screenshot is too small to show the city" }
+      # Method 1, step 7: what Visual Studio does with CMakePresets.json (MSVC and Ninja into out\build)
+      - name: Visual Studio's configure and build (x64 Release preset)
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          cmd /c "`"$vs\Common7\Tools\VsDevCmd.bat`" -arch=amd64 -host_arch=amd64 && cmake --preset x64-release && cmake --build out/build/x64-release"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      # Method 1, step 8
+      - name: new team07
+        run: python tools\citylab.py new team07
+      - name: Visual Studio's build finds the new team folder by itself
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          cmd /c "`"$vs\Common7\Tools\VsDevCmd.bat`" -arch=amd64 -host_arch=amd64 && cmake --build out/build/x64-release" | Tee-Object build.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if (-not (Select-String -Path build.log -Pattern "team07" -Quiet)) { throw "team07 was not built" }
+      - name: run team07
+        run: python tools\citylab.py run team07 --screenshot team07.png --frames 60
+      - name: check team07
+        run: python tools\citylab.py check team07
+      - name: lint team07
+        run: python tools\citylab.py lint team07
+      - name: pack team07
+        run: python tools\citylab.py pack team07 --phase 1 --no-check
+      - name: plots
+        run: python tools\citylab.py plots
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Method 2, Linux, step 1 (and a virtual screen, as the runner has none)
+      - name: install the tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake git python3 libgl1-mesa-dev libx11-dev libgl1-mesa-dri xvfb
+      # Method 2, Linux, step 4
+      - name: doctor
+        run: python3 tools/citylab.py doctor
+      - name: run
+        run: python3 tools/citylab.py run --time 21:30 --screenshot city.png --frames 60
+      - name: the window showed the city
+        run: |
+          size=$(stat -c %s city.png); echo "screenshot: $size bytes"
+          test "$size" -gt 50000
+      - name: new team07
+        run: python3 tools/citylab.py new team07
+      - name: run team07
+        run: python3 tools/citylab.py run team07 --screenshot team07.png --frames 60
+      - name: check team07
+        run: python3 tools/citylab.py check team07
+      - name: lint team07
+        run: python3 tools/citylab.py lint team07
+      - name: pack team07
+        run: python3 tools/citylab.py pack team07 --phase 1 --no-check
+      - name: plots
+        run: python3 tools/citylab.py plots
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Method 2, macOS (the runner has the command-line tools and CMake)
+      - name: doctor
+        run: python3 tools/citylab.py doctor
+      - name: run
+        run: python3 tools/citylab.py run --time 21:30 --screenshot city.png --frames 60
+      - name: the window showed the city
+        run: |
+          size=$(stat -f %z city.png); echo "screenshot: $size bytes"
+          test "$size" -gt 50000
+      - name: new team07
+        run: python3 tools/citylab.py new team07
+      - name: run team07
+        run: python3 tools/citylab.py run team07 --screenshot team07.png --frames 60
+      - name: check team07
+        run: python3 tools/citylab.py check team07
+      - name: lint team07
+        run: python3 tools/citylab.py lint team07
+      - name: pack team07
+        run: python3 tools/citylab.py pack team07 --phase 1 --no-check
+      - name: plots
+        run: python3 tools/citylab.py plots

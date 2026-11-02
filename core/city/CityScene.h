@@ -21,8 +21,7 @@ class CollisionWorld;
 
 // Everything the city staff builds: the streets with their sidewalks,
 // markings and the tram track, the central park with its lake, fountain and
-// tower, the street lamps, the gate and sign of every plot, and the skyline
-// around the city.
+// tower, the street lamps, and the gate and sign of every plot.
 //
 // The static parts are compiled once into display lists, cut into chunks
 // (city/Chunks.h) that each know their bounding box. A frame starts with
@@ -84,7 +83,6 @@ private:
     void buildTowerLights();
     void buildPlotFrames(const Registry& registry);
     void buildSigns();
-    void buildSkyline();
     void buildLampsAndBenches();
     void buildScatter();
     void buildEmptyPlots();
@@ -118,13 +116,6 @@ private:
     Props props_;
     Chunks chunks_;
 
-    // The skyline walls come in five looks; the lists hold geometry only, so
-    // the same ones are drawn again with the lit-window mask at night.
-    struct SkylineLook {
-        bool glass = true;
-        glm::vec3 tint{1.0f};
-    };
-    std::vector<SkylineLook> looks_;
     std::map<std::string, GLuint> lawnLists_;  // the meadow of every plot, by plot id
     std::map<int, GLuint> detailLists_, siteLists_;  // by plot width
 
@@ -146,7 +137,7 @@ private:
 
     // How many of everything the city has: numbers for tuning, not for the game.
     struct Census {
-        int streetLamps = 0, parkLamps = 0, benches = 0, flowerBeds = 0, skyline = 0;
+        int streetLamps = 0, parkLamps = 0, benches = 0, flowerBeds = 0;
     } census_;
 
     // Per frame.

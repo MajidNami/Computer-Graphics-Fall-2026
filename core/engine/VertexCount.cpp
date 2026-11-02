@@ -8,7 +8,7 @@
 namespace citylab {
 namespace {
 
-constexpr float kRange = 8192.0f;  // the box is +-kRange m: the whole city and its skyline fit
+constexpr float kRange = 8192.0f;  // the box is +-kRange m: the whole city and its surroundings fit
 constexpr int kViewport = 1024;    // only the mapping back to metres depends on it
 
 }  // namespace
