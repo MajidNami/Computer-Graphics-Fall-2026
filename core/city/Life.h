@@ -60,7 +60,7 @@ private:
     std::vector<Rect> junctions_;
     float signalClock_ = 0.0f;
 
-    GLuint tram_ = 0, tramLights_ = 0;
+    GLuint tram_ = 0, tramLights_ = 0, tramWheel_ = 0;
     std::vector<GLuint> signalPoles_;  // one list for every junction
     mutable int tramsDrawn_ = 0;
 };

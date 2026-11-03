@@ -85,6 +85,7 @@ add_library(citylab_core STATIC
     core/city/Geometry.cpp
     core/city/Layout.cpp
     core/city/Life.cpp
+    core/city/TramModel.cpp
     core/city/Materials.cpp
     core/city/Props.cpp
     core/city/Registry.cpp
