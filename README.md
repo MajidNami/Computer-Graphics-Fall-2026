@@ -536,6 +536,12 @@ keys, and press **F1** for every key. **Esc** gives the mouse back; a second
 Every other letter, digit and Space goes to the zone you are standing at, so
 your zone can react to keys of its own.
 
+The walking view shows two hands in full-finger leather gloves, with padded
+knuckles and jacket sleeves. They sway as you move and look around.
+Fly and orbit modes keep an unobstructed view of the city.
+
+[Preview of the gloved walking view](docs/images/first-person-gloves.png).
+
 ### Settings
 
 The first run writes `settings.json` in the project folder. Change it to suit

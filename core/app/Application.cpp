@@ -129,6 +129,7 @@ void Application::loadCity() {
     city_.build(layout_, registry_, root_, collisions_);
     life_.build(layout_);
     sky_.init(city_.materials().glow);
+    hands_.init();
     if (!hud_.init()) log::warn("hud", "the HUD font could not be created");
     const double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();
     log::info("city", "built in " + std::to_string(static_cast<int>(ms)) + " ms");
@@ -459,6 +460,9 @@ void Application::render() {
         const PlotLayout* f = focusedPlot();
         city_.drawPlotBorders({0.3f, 1.0f, 0.5f}, f ? f->id : std::string());
     }
+    if (camera_.mode() == CameraMode::Walk && options_.bench == 0) {
+        hands_.draw(static_cast<float>(w) / h, env_);
+    }
     if (showHud_) drawOverlay();
 }
 
@@ -542,6 +546,7 @@ int Application::run() {
                 toast(text);
             }
         }
+        hands_.update(camera_, dt_);
         clock_.advance(dt_);
         env_ = clock_.environment();
         life_.update(dt_, camera_.feet(), camera_.mode() == CameraMode::Walk);
