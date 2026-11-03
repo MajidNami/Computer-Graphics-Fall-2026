@@ -6,6 +6,8 @@
 #include "citylab/Shapes.h"
 #include "city/Geometry.h"
 #include "city/TramModel.h"
+#include "engine/Log.h"
+#include "engine/Texture.h"
 
 namespace citylab {
 namespace {
@@ -27,7 +29,7 @@ void emission(float r, float g, float b) {
 // Tram tracks and trams
 // --------------------------------------------------------------------------
 
-void CityLife::build(const Layout& L) {
+void CityLife::build(const Layout& L, const std::filesystem::path& root) {
     layout_ = &L;
     junctions_ = L.junctions();
     tracks_.clear();
@@ -78,6 +80,12 @@ void CityLife::build(const Layout& L) {
         }
     }
 
+    if (driverTexture_) glDeleteTextures(1, &driverTexture_);
+    TextureOptions options;
+    options.repeat = false;
+    std::string error;
+    driverTexture_ = loadTexture(root / "core" / "assets" / "shrek-driver.png", options, &error);
+    if (!driverTexture_) log::warn("tram", "driver texture: " + error);
     buildModels();
 }
 
@@ -270,6 +278,7 @@ void CityLife::draw(const Environment& env, const Viewer& view) const {
             glCallList(tram_);
             tram::wheels(t.s, tramWheel_);
             if (lightsOn) glCallList(tramLights_);
+            if (driverTexture_) tram::driver(driverTexture_, lightsOn);
             glPopMatrix();
             ++tramsDrawn_;
         }

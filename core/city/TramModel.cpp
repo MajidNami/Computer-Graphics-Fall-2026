@@ -298,6 +298,45 @@ void wheels(float distance, unsigned int wheelList) {
     }
 }
 
+void driver(unsigned int texture, bool night) {
+    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT | GL_LIGHTING_BIT);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.05f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_LIGHTING);
+    // Follow the sloped glass; retain its blue tint and leave the frame visible.
+    const float tint = night ? .64f : .90f;
+    glColor4f(tint * .90f, tint, tint * .98f, 1.0f);
+    const auto vertex = [](float x, float y, float u, float v) {
+        glTexCoord2f(u, v);
+        glVertex3f(x, y, -.184f - (y - 1.63f) * .486f + .018f);
+    };
+    glBegin(GL_QUADS);
+    glNormal3f(0, .437f, .899f);
+    vertex(-.62f, 1.65f, 0, 0);
+    vertex(.62f, 1.65f, 1, 0);
+    vertex(.62f, 2.65f, 1, 1);
+    vertex(-.62f, 2.65f, 0, 1);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);
+    // A dark console and control wheel sell the seated driving position.
+    paint(.045f, .075f, .09f);
+    box(-.85f, 1.60f, -.19f, .85f, 1.69f, -.15f);
+    glPushMatrix();
+    glTranslatef(.12f, 1.80f, -.235f);
+    glRotatef(64.0f, 1, 0, 0);
+    shapes::torus(.16f, .025f, 20, 6);
+    box(-.16f, -.015f, -.015f, .16f, .015f, .015f);
+    glPopMatrix();
+    glPopAttrib();
+}
+
 void lights(float cabinGlow) {
     glow(.25f * cabinGlow, .31f * cabinGlow, .27f * cabinGlow);
     for (int s = 0; s < 3; ++s) {

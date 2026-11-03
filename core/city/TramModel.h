@@ -9,5 +9,7 @@ void lights(float cabinGlow);
 // One wheel is cached once; the instances rotate with distance travelled.
 void wheel();
 void wheels(float distance, unsigned int wheelList);
+// Alpha-cut portrait in the active cab, under the wiper and above the console.
+void driver(unsigned int texture, bool night);
 
 } // namespace citylab::tram

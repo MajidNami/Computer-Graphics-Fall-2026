@@ -22,7 +22,7 @@ namespace citylab {
 // waits at them.
 class CityLife {
 public:
-    void build(const Layout& layout);
+    void build(const Layout& layout, const std::filesystem::path& root);
     // dt in real seconds. The walker on foot is someone the trams wait for.
     void update(float dt, const glm::vec3& walker, bool onFoot);
     void draw(const Environment& env, const Viewer& viewer) const;
@@ -61,6 +61,7 @@ private:
     float signalClock_ = 0.0f;
 
     GLuint tram_ = 0, tramLights_ = 0, tramWheel_ = 0;
+    GLuint driverTexture_ = 0;
     std::vector<GLuint> signalPoles_;  // one list for every junction
     mutable int tramsDrawn_ = 0;
 };
