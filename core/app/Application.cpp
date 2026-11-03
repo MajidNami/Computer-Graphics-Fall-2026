@@ -127,7 +127,7 @@ void Application::loadCity() {
 
     const auto start = std::chrono::steady_clock::now();
     city_.build(layout_, registry_, root_, collisions_);
-    life_.build(layout_);
+    life_.build(layout_, root_);
     sky_.init(city_.materials().glow);
     if (!hud_.init()) log::warn("hud", "the HUD font could not be created");
     const double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();

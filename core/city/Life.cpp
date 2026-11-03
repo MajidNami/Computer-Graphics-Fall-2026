@@ -5,6 +5,9 @@
 
 #include "citylab/Shapes.h"
 #include "city/Geometry.h"
+#include "city/TramModel.h"
+#include "engine/Log.h"
+#include "engine/Texture.h"
 
 namespace citylab {
 namespace {
@@ -26,7 +29,7 @@ void emission(float r, float g, float b) {
 // Tram tracks and trams
 // --------------------------------------------------------------------------
 
-void CityLife::build(const Layout& L) {
+void CityLife::build(const Layout& L, const std::filesystem::path& root) {
     layout_ = &L;
     junctions_ = L.junctions();
     tracks_.clear();
@@ -77,6 +80,12 @@ void CityLife::build(const Layout& L) {
         }
     }
 
+    if (driverTexture_) glDeleteTextures(1, &driverTexture_);
+    TextureOptions options;
+    options.repeat = false;
+    std::string error;
+    driverTexture_ = loadTexture(root / "core" / "assets" / "shrek-driver.png", options, &error);
+    if (!driverTexture_) log::warn("tram", "driver texture: " + error);
     buildModels();
 }
 
@@ -160,48 +169,20 @@ void CityLife::buildModels() {
     if (!tram_) {
         tram_ = glGenLists(1);
         tramLights_ = glGenLists(1);
+        tramWheel_ = glGenLists(1);
         for (size_t j = 0; j < junctions_.size(); ++j) signalPoles_.push_back(glGenLists(1));
     }
 
-    // The city's tram: three sections in white with the transit orange.
-    const float sectionL = (kTramLength - 0.9f) / 3.0f, w = 1.25f;
     glNewList(tram_, GL_COMPILE);
-    for (int s = 0; s < 3; ++s) {
-        const float z1 = -s * (sectionL + 0.45f), z0 = z1 - sectionL;
-        color(0.95f, 0.95f, 0.94f);
-        geom::block({-w, 0.4f, z0}, {w, 1.3f, z1}, 0.0f);
-        geom::block({-w, 2.8f, z0}, {w, 3.3f, z1}, 0.0f);
-        color(1.0f, 0.55f, 0.15f);
-        geom::block({-w - 0.01f, 1.3f, z0}, {w + 0.01f, 1.5f, z1}, 0.0f);
-        color(0.17f, 0.22f, 0.26f);
-        geom::block({-w + 0.02f, 1.5f, z0 + 0.1f}, {w - 0.02f, 2.8f, z1 - 0.1f}, 0.0f);
-        color(0.85f, 0.86f, 0.87f);
-        geom::block({-0.8f, 3.3f, z0 + 2.0f}, {0.8f, 3.6f, z1 - 2.0f}, 0.0f);
-        color(0.18f, 0.18f, 0.20f);
-        for (const float z : {z0 + 1.8f, z1 - 1.8f}) geom::block({-1.0f, 0.05f, z - 1.0f}, {1.0f, 0.45f, z + 1.0f}, 0.0f);
-        if (s < 2) geom::block({-1.0f, 0.5f, z0 - 0.45f}, {1.0f, 3.1f, z0}, 0.0f);  // the bellows
-    }
-    color(0.20f, 0.20f, 0.22f);  // the pantograph on the middle section, raised to the wire
-    const float zp = -(sectionL + 0.45f) - sectionL * 0.5f;
-    geom::block({-0.05f, 3.6f, zp - 0.6f}, {0.05f, 5.7f, zp - 0.5f}, 0.0f);
-    geom::block({-0.8f, 5.7f, zp - 0.65f}, {0.8f, 5.76f, zp - 0.45f}, 0.0f);
+    tram::body();
     glEndList();
 
     glNewList(tramLights_, GL_COMPILE);
-    emission(0.55f, 0.50f, 0.38f);  // lit from inside
-    color(0.9f, 0.85f, 0.65f);
-    for (int s = 0; s < 3; ++s) {
-        const float z1 = -s * (sectionL + 0.45f), z0 = z1 - sectionL;
-        geom::block({-w - 0.005f, 1.6f, z0 + 0.4f}, {w + 0.005f, 2.7f, z1 - 0.4f}, 0.0f);
-    }
-    emission(1.0f, 0.95f, 0.8f);
-    color(1.0f, 0.95f, 0.8f);
-    for (const float x : {-0.8f, 0.8f}) geom::block({x - 0.15f, 0.7f, 0.0f}, {x + 0.15f, 0.9f, 0.02f}, 0.0f);
-    emission(0.9f, 0.08f, 0.05f);
-    color(0.9f, 0.1f, 0.1f);
-    for (const float x : {-0.8f, 0.8f})
-        geom::block({x - 0.15f, 0.7f, -kTramLength - 0.02f}, {x + 0.15f, 0.9f, -kTramLength}, 0.0f);
-    emission(0.0f, 0.0f, 0.0f);
+    tram::lights(1.0f);
+    glEndList();
+
+    glNewList(tramWheel_, GL_COMPILE);
+    tram::wheel();
     glEndList();
 
     // One signal for each way into every junction, on the right-hand corner
@@ -273,6 +254,12 @@ void CityLife::draw(const Environment& env, const Viewer& view) const {
     tramsDrawn_ = 0;
     drawSignals(env, view);
     const bool lightsOn = env.lampLevel > 0.3f;
+    // The models use painted metal and glass, with no city ground texture.
+    glPushAttrib(GL_ENABLE_BIT | GL_LIGHTING_BIT | GL_CURRENT_BIT | GL_POLYGON_BIT);
+    glDisable(GL_TEXTURE_2D);
+    const GLfloat specular[] = {0.24f, 0.28f, 0.30f, 1.0f};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 48.0f);
     const Rect area = layout_->city.grown(260.0f);
     const glm::vec2 viewer{view.eye.x, view.eye.z};
     const float reach = std::min(900.0f, view.distance);
@@ -289,11 +276,14 @@ void CityLife::draw(const Environment& env, const Viewer& view) const {
             glTranslatef(front.x, 0.0f, front.y);
             glRotatef(yaw, 0.0f, 1.0f, 0.0f);
             glCallList(tram_);
+            tram::wheels(t.s, tramWheel_);
             if (lightsOn) glCallList(tramLights_);
+            if (driverTexture_) tram::driver(driverTexture_, lightsOn);
             glPopMatrix();
             ++tramsDrawn_;
         }
     }
+    glPopAttrib();
 }
 
 }  // namespace citylab
