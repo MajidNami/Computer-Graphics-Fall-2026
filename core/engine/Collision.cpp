@@ -63,7 +63,7 @@ float CollisionWorld::groundHeight(float x, float z, float feetY) const {
     return ground;
 }
 
-glm::vec3 CollisionWorld::move(const glm::vec3& from, const glm::vec2& delta) const {
+glm::vec3 CollisionWorld::move(const glm::vec3& from, const glm::vec2& delta, bool followGround) const {
     glm::vec3 p = from;
     // Sub-step fast moves so the walker cannot tunnel through thin walls.
     const float length = glm::length(delta);
@@ -76,7 +76,8 @@ glm::vec3 CollisionWorld::move(const glm::vec3& from, const glm::vec2& delta) co
         // Push out of every box that blocks the body (two passes handle corners).
         for (int pass = 0; pass < 2; ++pass) {
             forNear(p.x, p.z, kRadius + 1.0f, [&](const Box& b) {
-                if (b.max.y <= p.y + kStepHeight || b.min.y >= p.y + kBodyHeight) return;  // step or overhead
+                if (b.max.y <= p.y + (followGround ? kStepHeight : 0.0f) || b.min.y >= p.y + kBodyHeight)
+                    return;  // step or overhead
                 const float cx = std::clamp(p.x, b.min.x, b.max.x);
                 const float cz = std::clamp(p.z, b.min.z, b.max.z);
                 const float dx = p.x - cx, dz = p.z - cz;
@@ -100,9 +101,23 @@ glm::vec3 CollisionWorld::move(const glm::vec3& from, const glm::vec2& delta) co
         }
         p.x = std::clamp(p.x, boundsMin_.x, boundsMax_.x);
         p.z = std::clamp(p.z, boundsMin_.y, boundsMax_.y);
-        p.y = groundHeight(p.x, p.z, p.y);
+        if (followGround) p.y = groundHeight(p.x, p.z, p.y);
     }
     return p;
+}
+
+float CollisionWorld::moveVertical(const glm::vec3& from, float deltaY) const {
+    float y = std::max(0.0f, from.y + deltaY);
+    forNear(from.x, from.z, kRadius, [&](const Box& b) {
+        const float dx = from.x - std::clamp(from.x, b.min.x, b.max.x);
+        const float dz = from.z - std::clamp(from.z, b.min.z, b.max.z);
+        if (dx * dx + dz * dz >= kRadius * kRadius) return;
+        if (deltaY < 0.0f && b.max.y <= from.y && b.max.y >= y)
+            y = b.max.y;
+        else if (deltaY > 0.0f && b.min.y >= from.y + kBodyHeight && b.min.y <= y + kBodyHeight)
+            y = b.min.y - kBodyHeight;
+    });
+    return y;
 }
 
 glm::vec3 CollisionWorld::moveThrough(const glm::vec3& from, const glm::vec2& delta) const {

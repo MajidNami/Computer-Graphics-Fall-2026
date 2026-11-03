@@ -36,7 +36,11 @@ public:
 
     // Moves a walker from `from` (feet position) by `delta` in x/z, sliding
     // along walls. Returns the new feet position, including steps up/down.
-    glm::vec3 move(const glm::vec3& from, const glm::vec2& delta) const;
+    // Airborne movement keeps its height and cannot automatically climb steps.
+    glm::vec3 move(const glm::vec3& from, const glm::vec2& delta, bool followGround = true) const;
+
+    // Sweep the body vertically, stopping at floors and ceilings.
+    float moveVertical(const glm::vec3& from, float deltaY) const;
 
     // The same walk without the walls: the walker goes through everything, on
     // the ground, and only the edge of the city stops it.

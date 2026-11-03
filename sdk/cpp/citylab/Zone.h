@@ -50,7 +50,7 @@ public:
 
     // A key was pressed while your plot is focused. Letters arrive lowercase
     // ('a'..'z', except w a s d q e which move the camera), digits '0'..'9'
-    // and ' ' for space.
+    // (Space is reserved for jumping).
     virtual void onKey(int key) { (void)key; }
 };
 

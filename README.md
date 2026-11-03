@@ -519,6 +519,7 @@ keys, and press **F1** for every key. **Esc** gives the mouse back; a second
 | Key | |
 |---|---|
 | W A S D, arrows | walk (hold **Shift** to run, **Ctrl** to creep) |
+| Space | jump when walking (hold to bunny hop) |
 | click, then move the mouse | look around; **Esc** frees the mouse (dragging works too) |
 | click on the map | jump there |
 | mouse wheel | walking and flying speed: faster or slower by a tenth per notch (zoom when orbiting) |
@@ -533,7 +534,7 @@ keys, and press **F1** for every key. **Esc** gives the mouse back; a second
 | F2, F3 | plot borders, statistics (frames per second, how much the city draws, the time of each zone) |
 | F10, F12 | hide the display, save a screenshot in `screenshots/` |
 
-Every other letter, digit and Space goes to the zone you are standing at, so
+Every other letter and digit goes to the zone you are standing at, so
 your zone can react to keys of its own.
 
 ### Settings

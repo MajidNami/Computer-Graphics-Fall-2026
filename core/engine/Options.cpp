@@ -65,7 +65,8 @@ std::string optionsHelp() {
   --version            print the version
   --help               show this text
 
-Keys:  F1 help   F2 plot borders   F3 statistics   F4 map   F5 clock speed
+Keys:  Space jump (walk mode; hold to bunny hop)
+       F1 help   F2 plot borders   F3 statistics   F4 map   F5 clock speed
        F6 pause clock   F7 +1 hour   F8 reset zone   F9 camera mode   F10 HUD
        F12 screenshot
        Tab / Shift+Tab next / previous place   Home back to start
