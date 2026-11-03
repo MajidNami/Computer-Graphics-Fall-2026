@@ -7,8 +7,7 @@ phase has its own document in [docs/phases](phases).
 
 ## Teams and topics
 
-- Teams have two members. Both members must understand and be able to
-  explain every part of the code.
+- Teams have two members.
 - The staff publish the catalogue of topics ([docs/city.md](city.md),
   `city/places.json`). Every topic is big enough for a whole project and has
   a fixed plot in a district that suits it: the airport at the edge of the

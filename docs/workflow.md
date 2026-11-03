@@ -59,7 +59,7 @@ git push
 ```
 
 - Commit small steps with clear messages. Both members commit their own
-  work: the history is how the staff see who did what.
+  work.
 - Add only `teams/team07/`. If `git status` shows other changed files,
   something on your computer changed them (an editor, a build); leave them
   out of your commit.
@@ -106,9 +106,9 @@ again.
 
 ## Submitting a phase
 
-A phase is submitted in two places, both before the deadline:
+A phase is submitted in two places:
 
-1. **GitHub:** the pull request, with your last commit before the deadline.
+1. **GitHub:** the pull request.
 2. **Courses:** the zip made by
 
    ```sh
@@ -121,8 +121,7 @@ A phase is submitted in two places, both before the deadline:
    uncommitted changes, `pack` warns you, because the zip and GitHub would
    not agree.
 
-The graders look at the commit named in `COMMIT.txt`. Late days come out of
-the course's fixed 72-hour allowance.
+The graders look at the commit named in `COMMIT.txt`.
 
 ## When something goes wrong
 

@@ -144,8 +144,7 @@ with a warning. Keep the gate clear (see above).
   `.md`, `.txt` and images (`.png`, `.jpg`, `.jpeg`, `.bmp`, `.tga`). No
   build products, no archives, no symbolic links.
 - Put your classes in `namespace teamNN` (the name of your folder).
-- `extras/` is outside the city build: the rules above do not apply there,
-  and nothing in it is graded.
+- `extras/` is outside the city build: the rules above do not apply there.
 - `README.md` lists every image or file you did not make yourselves, with its
   source and licence.
 
@@ -184,4 +183,4 @@ night) in `build/check/team07/`, and prints one line per check:
 | OpenGL usage | anything the city had to repair, and OpenGL errors |
 
 A red line (fail) must be fixed before you submit. A yellow line (warning)
-costs points but does not stop the grading.
+is worth fixing too.
