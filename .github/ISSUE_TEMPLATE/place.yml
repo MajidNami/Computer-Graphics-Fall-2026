@@ -27,11 +27,10 @@ body:
   - type: textarea
     id: idea
     attributes:
-      label: Idea, phase by phase
+      label: The idea
       description: >
-        What will you model in phase 1, what will move in phase 2 (a pivot, a
-        Bézier path, a moving hierarchy) and what will lights and textures add
-        in phase 3? Plots are up to 40 m high and may go 5 m below ground. The
-        topic must be big enough for a whole team project.
+        What would you build on the plot? Plots are up to 40 m high and may
+        go 5 m below ground. The topic must be big enough for a whole team
+        project.
     validations:
       required: true

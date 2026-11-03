@@ -13,11 +13,8 @@ What it checks:
   "خانهٔ"; the letters ء أ إ ؤ ۀ; the Arabic yeh, kaf and teh marbuta) are not
   used, unless the mark is inseparable from the word itself. Those few words
   are listed in KEEP. A last heh before an ezafe is written ه‌ی ("خانه‌ی").
-* Every topic offers an idea for each of the three kinds of motion that phase 2
-  asks for (an off-centre pivot, a Bézier path, a moving hierarchy), so no
-  topic leaves a team without a way to show one of them.
-* The catalogue is consistent: three phase texts in English and in Persian,
-  unique ids and plots, and a plot that belongs to the topic's district.
+* The catalogue is consistent: unique ids and plots, and English and Persian
+  titles for every topic.
 """
 import json
 import pathlib
@@ -25,8 +22,6 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-
-MOTION_KINDS = ("pivot", "path", "hierarchy")
 
 # Words with a mark that cannot be taken out of them (the spelling needs it).
 KEEP = {"رأس", "تئاتر"}
@@ -70,17 +65,10 @@ def check(places_file=None, teams_dir=None):
         if p["plot"] in plots:
             problems.append(f"{pid}: plot {p['plot']} is used by another topic")
         plots.add(p["plot"])
-        for key in ("phases", "phases_fa"):
-            if len(p.get(key, [])) != 3 or not all(isinstance(t, str) and t.strip() for t in p.get(key, [])):
-                problems.append(f"{pid}: '{key}' needs three texts (modelling, animation, light and texture)")
-        motion = p.get("motion", {})
-        for kind in MOTION_KINDS:
-            if not str(motion.get(kind, "")).strip():
-                problems.append(f"{pid}: 'motion' has no idea for '{kind}'")
-        for key in ("title", "phases_fa"):
-            value = p.get(key, "")
-            for text in value if isinstance(value, list) else [value]:
-                problems += persian_problems(text, f"{pid}.{key}")
+        for key in ("title", "title_en"):
+            if not str(p.get(key, "")).strip():
+                problems.append(f"{pid}: '{key}' is empty")
+        problems += persian_problems(p.get("title", ""), f"{pid}.title")
     for team_file in sorted(teams_dir.glob("*/team.json")):
         team = json.loads(team_file.read_text(encoding="utf-8"))
         problems += persian_problems(team.get("title", ""), f"{team_file.parent.name} title")
@@ -92,7 +80,7 @@ def main() -> int:
     for line in problems:
         print("places:", line)
     if not problems:
-        print("places: catalogue ok (Persian spelling, three kinds of motion in every topic)")
+        print("places: catalogue ok (titles and Persian spelling)")
     return 1 if problems else 0
 
 

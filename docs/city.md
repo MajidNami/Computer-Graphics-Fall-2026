@@ -47,9 +47,7 @@ the same list with the teams.
 
 ## Districts and topics
 
-Every topic is a whole project for a team of two. `city/places.json` also
-suggests what each phase could add to each topic, in English and Persian;
-the ideas are starting points, not requirements.
+Every topic is a whole project for a team of two.
 
 ### Culture & Education (CU)
 
@@ -113,51 +111,6 @@ the ideas are starting points, not requirements.
 | EN-5 | 80 × 100 | Recycling Plant (`recycling-plant`) | south avenue |
 | EN-6 | 80 × 100 | Container Terminal (`container-terminal`) | south avenue |
 
-### What each topic offers for phase 2
-
-Phase 2 asks for three moving elements that show three different ideas
-([the project](project.md#phase-2-bring-it-to-life)): a rotation about an
-off-centre pivot, a motion along a Bézier path, and a moving hierarchy. Every
-topic offers an idea for each of the three, so no team is left without a way
-to show one of them. These are suggestions (the full list of ideas for each
-phase is in `city/places.json`); your own idea is as good, if it shows the
-same thing. The requirements are the same for every topic: a topic with many
-ideas (the airport) does not need all of them, and a topic with fewer has
-room to do each one well.
-
-| Plot | Topic | Rotation about an off-centre pivot | Motion along a Bézier path | Moving hierarchy (two or more moving levels) |
-|---|---|---|---|---|
-| CU-1 | Observatory & Planetarium | Dome shutter hinged at its edge | A shooting star at night | Telescope: mount, then tube (two joints) |
-| CU-2 | Science Museum | Foucault pendulum | Rocket lift-off | Planets: sun, planet, moon |
-| CU-3 | Public Library | Automatic door | Book carts between the shelves | Return robot arm with two joints |
-| CU-4 | Cinema Multiplex | Ticket barrier arm | A limousine arriving for the premiere | Searchlight on a two-joint mount |
-| CU-5 | Concert Hall | Piano lid on its hinge | A follow spot gliding over the stage | Lighting rig: truss, then spot arms |
-| CU-6 | Art Gallery | Revolving gallery door | A guide drone along the visitors' route | Hanging mobile with several levels |
-| CO-1 | Office Tower | Lobby door on a hinge | A delivery drone to the roof | Window cradle: boom, then cradle |
-| CO-2 | Shopping Mall | Car-deck door on a hinge | Shoppers walking on paths | Kinetic sculpture in the atrium |
-| CO-3 | Hotel | Taxi door or umbrella ribs | The taxi arriving | Rooftop restaurant: disc, then tray |
-| CO-4 | Café Street | Umbrellas opening | The waiter on a path | Coffee-cup sign: arm, then cup |
-| CO-5 | Car Showroom | Car doors and bonnet | The car driving out | Turntable, car, wheels |
-| SP-1 | Football Stadium | Turnstile arms | The ball | Player: torso, arm, forearm |
-| SP-4 | Amusement Park | Ride gate | Roller coaster | Ferris wheel: wheel, then cabins |
-| SP-6 | Swimming Pool | Diving board | Slides with swimmers | Pool hoist: arm, then seat |
-| TR-1 | Railway Station | Level-crossing barrier | The train | Car, bogie, wheel |
-| TR-3 | Cable Car Station | Cabin doors hinged at one edge | Cabins along the cable, easing in the stations | Cabin on its hanger arm, swinging under the grip |
-| TR-4 | Airport | Cargo door | The plane landing | Boarding bridge: two telescoping parts and the cabin |
-| TR-6 | Bus Terminal | Bus doors, exit barrier | The bus into its bay | Articulated bus: front, joint, rear |
-| SV-1 | Hospital | Ambulance-bay barrier | Ambulance and helicopter approach | Helicopter: body, rotor, blades |
-| SV-2 | Fire Station | Bay door | The engine driving out | Ladder: turntable, ladder, extension |
-| SV-3 | City Hall & Clock Tower | Clock hands about their hubs, driven by the city clock | Figures parading along a curve at noon | Bell: frame, then bell, then clapper |
-| SV-4 | Fuel and EV Station | Car-wash barrier | The car through the wash | Brush arm: gantry, arm, brush |
-| SV-5 | Logistics Hub | Dock levellers | Delivery drones | Forklift: truck, mast, forks |
-| SV-6 | Weather Station | Wind vane turning about the mast | A weather balloon rising along a curve | Dish: turntable, then tilt, then feed arm |
-| EN-1 | Solar Power Plant | Panels tilting to the sun | The cleaning robot | Robot: base, arm, brush |
-| EN-2 | Wind Farm | Nacelle turning into the wind | A service vehicle on the visitor path | Tower, nacelle, rotor, blades |
-| EN-3 | Water Treatment Plant | Sluice gate | An inspection boat circling the basin | Rotating bridge: bridge, then scraper |
-| EN-4 | Car Factory | Car doors on the line | The car on the test track | Robot arm with three joints |
-| EN-5 | Recycling Plant | Tipping truck bed | A truck arriving | Crane: boom, cable, grabber |
-| EN-6 | Container Terminal | Ship ramp | The ship docking | Gantry crane: gantry, trolley, spreader |
-
 ## Room to grow
 
 Two plots (CO-6 and SP-3) are free, and so is the plot of every topic no
@@ -216,6 +169,6 @@ concerns your plot.
 The flower beds, benches, street and park lamps, bus shelters and cranes that
 the city uses, and a simple shrub, are in the SDK (`props::bench()`,
 `props::streetLamp()`, ...). Use them for the surroundings of your plot. They
-are not graded: the phases ask for objects you model yourselves. Trees and
+are helpers only: model your own objects for your project. Trees and
 cars are not in the SDK; model your own. Every prop is described in
 `sdk/cpp/citylab/Props.h`.

@@ -15,8 +15,8 @@
 // They are drawn with colours only and leave the OpenGL state as they found
 // it (they save it with glPushAttrib). You may pass textures of your own.
 //
-// They are helpers, not part of what is graded: modelling your own objects
-// is what each phase asks for. Use them for the surroundings.
+// They are helpers for the surroundings; model your own objects for your
+// project.
 namespace citylab::props {
 
 // Optional textures for the parts of the objects; 0 means a plain colour.

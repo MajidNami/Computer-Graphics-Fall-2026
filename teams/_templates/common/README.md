@@ -20,9 +20,9 @@ This folder belongs to your team alone. Do not change anything outside
 
 | Phase | What we built | Status |
 |---|---|---|
-| 1. Hierarchical modelling and display lists | | |
-| 2. Animation (at least three movements of different kinds) | | |
-| 3. Lighting, materials, textures and collisions | | |
+| 1 | | |
+| 2 | | |
+| 3 | | |
 
 ## Keys
 

@@ -130,7 +130,7 @@ time budget.
 
 ## Colliders
 
-From phase 3 the walls of your main structures are solid. Add boxes with
+Colliders make the walls of your structures solid. Add boxes with
 `addCollider(min, max)` in `init()`, in plot-local coordinates. A visitor
 cannot walk through them; a box lower than 0.4 m can be stepped onto, which
 is how stairs work. A box that lies completely outside the plot is ignored
@@ -161,8 +161,7 @@ A zone can crash or misbehave without taking the city down:
   the panel at the top left says why. Fix the code, build and start the city
   again; **F8** at your plot restarts a stopped zone without a new build.
 
-Each repaired mistake is still a warning in the check report, and warnings
-cost points in the *integration* column of [the grading](project.md#grading).
+Each repaired mistake is still a warning in the check report.
 
 ## What check reports
 

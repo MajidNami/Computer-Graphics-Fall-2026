@@ -18,19 +18,19 @@ using namespace citylab;
 class MyZone : public Zone {
 public:
     void init(Context& ctx) override {
-        // Phase 1: build everything that never moves into a display list.
+        // Everything that never moves goes into a display list, built once.
         scenery_ = glGenLists(1);
         glNewList(scenery_, GL_COMPILE);
         drawScenery(ctx.plot());
         glEndList();
 
-        // Phase 3: what the visitor cannot walk through.
+        // What the visitor cannot walk through.
         ctx.addCollider({-5.0f, 0.0f, -14.0f}, {5.0f, 4.0f, -6.0f});
         ctx.log("hello from " + ctx.teamId() + " on plot " + ctx.plot().id);
     }
 
     void update(const Frame& frame) override {
-        // Phase 2: move things with frame.dt so the speed is the same on every computer.
+        // Move things with frame.dt so the speed is the same on every computer.
         if (spinning_) angle_ += 45.0f * frame.dt;  // degrees per second
     }
 

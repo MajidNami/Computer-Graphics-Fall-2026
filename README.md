@@ -39,13 +39,14 @@ and lets visitors walk into it.
 
 ## What you will build
 
-| Phase | Topic | You show |
-|---|---|---|
-| 1 | Modelling | Hierarchical transforms, a custom mesh, display lists |
-| 2 | Animation | Time-based motion, pivots, a Bézier path, easing |
-| 3 | Light and texture | Normals, local lights, materials, textures, collisions |
+| Phase | Topic |
+|---|---|
+| 1 | Modeling with transformations: geometry, translation, rotation, scaling, composition, geometry reuse |
+| 2 | Animation: time-based motion, pivots, Bézier motion, easing |
+| 3 | Lighting and texture: normals, lighting and materials, textures |
 
-The full brief, with every requirement and how it is graded, is in
+Each phase has its own document, published in [docs/phases](docs/phases)
+when the phase starts. Teams and topics are explained in
 [docs/project.md](docs/project.md).
 
 The course teaches the fixed-function pipeline, so CityLab uses it too:
@@ -761,7 +762,7 @@ Computer-Graphics-Fall-2026/
 ├── tools/
 │   ├── citylab.py          doctor, build, run, new, check, lint, pack, plots
 │   └── staff/              tools the staff use to generate the plan and the signs
-├── docs/                   the project brief, the rules, the city, the GitHub workflow
+├── docs/                   the project, the phases, the rules, the city, the GitHub workflow
 └── .github/                issue and pull request templates, automatic checks (CI)
 ```
 
@@ -772,7 +773,8 @@ Files you create while working stay out of Git (`.gitignore`): `build/`,
 
 | Read | When |
 |---|---|
-| [The project](docs/project.md) | The three phases, deliverables and grading |
+| [The project](docs/project.md) | Teams and topics |
+| [The phases](docs/phases) | The document of each phase, published when the phase starts |
 | [Rules of the city](docs/rules.md) | The plot contract, budgets and what the city checks |
 | [The city](docs/city.md) | The plan, the six districts and the catalogue of topics |
 | [Working with GitHub](docs/workflow.md) | Fork, pull request, staying up to date, submitting a phase |

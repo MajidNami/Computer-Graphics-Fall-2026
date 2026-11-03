@@ -60,7 +60,7 @@ PIXELFORMATDESCRIPTOR basicFormat() {
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 32;
     pfd.cDepthBits = 24;
-    pfd.cStencilBits = 8;  // planar shadows and reflections (phase 3 bonus)
+    pfd.cStencilBits = 8;  // for planar shadows and reflections
     pfd.iLayerType = PFD_MAIN_PLANE;
     return pfd;
 }
