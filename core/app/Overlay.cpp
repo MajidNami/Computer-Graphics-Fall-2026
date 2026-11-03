@@ -205,6 +205,7 @@ void Application::drawHelp(float width, float height) {
     const char* lines[] = {
         "Moving",
         "  W A S D or arrows      walk  (Shift runs, Ctrl creeps)",
+        "  Space                  jump when walking (hold to bunny hop)",
         "  click, then the mouse  look around  (Esc frees the mouse)",
         "  Q / E                  down / up when flying, zoom when orbiting",
         "  mouse wheel            walking and flying speed (zoom when orbiting)",
@@ -222,7 +223,7 @@ void Application::drawHelp(float width, float height) {
         "  F10 hide this display     F12 screenshot     Esc quit (when the mouse is free)",
         "",
         "Your zone",
-        "  Other letters, digits and Space go to the zone you are standing at.",
+        "  Other letters and digits go to the zone you are standing at.",
     };
     const int count = static_cast<int>(sizeof lines / sizeof lines[0]);
     float tw = 0.0f;

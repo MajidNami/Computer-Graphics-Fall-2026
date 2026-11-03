@@ -45,7 +45,7 @@ std::filesystem::path searchUpwards(std::filesystem::path p) {
 }
 
 bool reservedForCamera(int key) {
-    return key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'q' || key == 'e';
+    return key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'q' || key == 'e' || key == ' ';
 }
 
 }  // namespace
@@ -315,7 +315,7 @@ void Application::handleKeys() {
     }
     if (touring_) {
         for (const int k : {int('w'), int('a'), int('s'), int('d'), int(Key::Up), int(Key::Down), int(Key::Left),
-                            int(Key::Right)})
+                            int(Key::Right), int(' ')})
             if (window_->keyDown(k)) {
                 touring_ = false;
                 camera_.setMode(CameraMode::Walk);

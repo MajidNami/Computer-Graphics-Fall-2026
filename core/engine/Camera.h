@@ -12,7 +12,7 @@ namespace citylab {
 class CollisionWorld;
 
 // The viewer. Three modes, switched with F9:
-//   Walk  - first person at eye height 1.7 m, collides with the city
+//   Walk  - first person at eye height 1.7 m, collides with the city; Space jumps
 //   Fly   - free flight, no collisions (good for looking at roofs)
 //   Orbit - turns around a target point (good for building one plot)
 //
@@ -80,6 +80,8 @@ private:
     // jump by a step at a time; this follows them in a short glide, so a stair
     // is climbed rather than snapped onto.
     float groundY_ = 0.0f;
+    float verticalSpeed_ = 0.0f;
+    bool airborne_ = false;
     // Walk and fly: the speed along the view's own axes (x to the right, y up,
     // z ahead), which eases towards what the keys ask for. Kept in the view's
     // frame, not the world's, so turning the view while holding a key turns the

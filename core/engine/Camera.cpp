@@ -22,6 +22,8 @@ constexpr float kFlyStart = 11.0f, kFlyStop = 14.0f;
 constexpr float kStepGlide = 16.0f;   // the eye follows the ground this fast
 constexpr float kOrbitFollow = 18.0f; // the orbit follows the mouse and the wheel this fast
 constexpr float kBobHeight = 0.03f;   // metres up and down at full walking speed
+constexpr float kGravity = 18.0f;
+constexpr float kJumpSpeed = 6.0f;    // about one metre high, two thirds of a second in the air
 
 float follow(float rate, float dt) { return 1.0f - std::exp(-rate * dt); }
 
@@ -57,11 +59,15 @@ void Camera::setMode(CameraMode mode) {
         distanceGoal_ = distance_;
     }
     mode_ = mode;
+    verticalSpeed_ = 0.0f;
+    airborne_ = false;
     drive_ = glm::vec3(0.0f);
     groundY_ = feet_.y;
 }
 
 void Camera::place(const glm::vec3& position, float yaw, float pitch) {
+    verticalSpeed_ = 0.0f;
+    airborne_ = false;
     yaw_ = yaw;
     pitch_ = std::clamp(pitch, -kMaxPitch, kMaxPitch);
     feet_ = {position.x, 0.0f, position.z};
@@ -78,6 +84,8 @@ void Camera::place(const glm::vec3& position, float yaw, float pitch) {
 }
 
 void Camera::orbit(const glm::vec3& target, float yaw, float pitch, float distance) {
+    verticalSpeed_ = 0.0f;
+    airborne_ = false;
     mode_ = CameraMode::Orbit;
     target_ = target;
     yaw_ = yaw;
@@ -90,6 +98,8 @@ void Camera::orbit(const glm::vec3& target, float yaw, float pitch, float distan
 }
 
 void Camera::setWalkPose(const glm::vec3& feet, float yaw, float pitch) {
+    verticalSpeed_ = 0.0f;
+    airborne_ = false;
     mode_ = CameraMode::Walk;
     feet_ = feet;
     groundY_ = feet.y;
@@ -115,6 +125,7 @@ glm::mat4 Camera::view() const {
 
 void Camera::update(const PlatformWindow& window, float dt, const CollisionWorld& world) {
     const auto& in = window.input();
+    const bool jumpDown = window.keyDown(' ');
     const bool run = window.keyDown(Key::Shift), creep = window.keyDown(Key::Control);
     auto held = [&](int a, int b) { return window.keyDown(a) || window.keyDown(b); };
 
@@ -173,6 +184,11 @@ void Camera::update(const PlatformWindow& window, float dt, const CollisionWorld
     const glm::vec3 right{std::cos(yaw_), 0.0f, std::sin(yaw_)};
 
     if (mode_ == CameraMode::Walk) {
+        if (jumpDown && !airborne_) {
+            verticalSpeed_ = kJumpSpeed;
+            airborne_ = true;
+            groundY_ = feet_.y;
+        }
         const glm::vec3 ahead{std::sin(yaw_), 0.0f, -std::cos(yaw_)};
         const float speed = (creep ? 2.0f : run ? settings_.runSpeed : settings_.walkSpeed) * speedScale_;
         glm::vec2 asked{strafe, forwardAmount};
@@ -185,7 +201,36 @@ void Camera::update(const PlatformWindow& window, float dt, const CollisionWorld
         // The view's own axes, turned to where the view looks now.
         const glm::vec3 velocity = ahead * drive_.z + right * drive_.x;
         const glm::vec2 delta{velocity.x * dt, velocity.z * dt};
-        feet_ = walkThrough_ ? world.moveThrough(feet_, delta) : world.move(feet_, delta);
+        if (walkThrough_) {
+            const float y = feet_.y;
+            feet_ = world.moveThrough(feet_, delta);
+            if (airborne_) feet_.y = y;
+        } else {
+            feet_ = world.move(feet_, delta, !airborne_);
+        }
+        if (airborne_ && dt > 0.0f) {
+            // Small steps also catch a ceiling when a long frame spans the apex.
+            const int steps = std::max(1, static_cast<int>(std::ceil(dt / (1.0f / 120.0f))));
+            const float step = dt / static_cast<float>(steps);
+            for (int i = 0; i < steps && airborne_; ++i) {
+                const float dy = verticalSpeed_ * step - 0.5f * kGravity * step * step;
+                verticalSpeed_ -= kGravity * step;
+                const float nextY = walkThrough_ ? std::max(0.0f, feet_.y + dy) : world.moveVertical(feet_, dy);
+                if (dy < 0.0f && nextY >= feet_.y + dy) {
+                    // Exact contact counts as a landing, too.
+                    const bool landed = walkThrough_ ? nextY == 0.0f
+                        : nextY > feet_.y + dy || world.moveVertical({feet_.x, nextY, feet_.z}, -0.001f) == nextY;
+                    if (landed) {
+                        verticalSpeed_ = 0.0f;
+                        airborne_ = false;
+                    }
+                } else if (dy > 0.0f && nextY < feet_.y + dy) {
+                    verticalSpeed_ = 0.0f;
+                }
+                feet_.y = nextY;
+            }
+            groundY_ = feet_.y;
+        }
         // The eye follows the ground in a short glide, so a stair is climbed, not snapped onto.
         groundY_ += (feet_.y - groundY_) * follow(kStepGlide, dt);
         if (std::fabs(feet_.y - groundY_) < 0.001f) groundY_ = feet_.y;
@@ -193,7 +238,7 @@ void Camera::update(const PlatformWindow& window, float dt, const CollisionWorld
         const float pace = glm::length(drive_);
         const bool moving = pace > 0.3f;
         const float strength = std::min(1.0f, pace / (settings_.walkSpeed * speedScale_));
-        bobAmount_ += ((moving && settings_.headBob ? strength : 0.0f) - bobAmount_) * follow(6.0f, dt);
+        bobAmount_ += ((moving && !airborne_ && settings_.headBob ? strength : 0.0f) - bobAmount_) * follow(6.0f, dt);
         if (moving) bob_ = std::fmod(bob_ + dt * (5.0f + 0.5f * pace), 2.0f * 3.14159265f);
         return;
     }
