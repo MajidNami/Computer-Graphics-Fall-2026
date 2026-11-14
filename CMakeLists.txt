@@ -69,6 +69,7 @@ add_library(citylab_core STATIC
     core/engine/Camera.cpp
     core/engine/Clock.cpp
     core/engine/Collision.cpp
+    core/engine/FirstPersonHands.cpp
     core/engine/Font.cpp
     core/engine/Hud.cpp
     core/engine/Json.cpp

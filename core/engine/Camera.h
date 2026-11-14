@@ -58,6 +58,7 @@ public:
     float yaw() const { return yaw_; }
     float pitch() const { return pitch_; }
     glm::vec3 feet() const { return feet_; }
+    float movementSpeed() const { return glm::length(drive_); }
     // The point the viewer is "at": the feet when walking, the eye when
     // flying, the orbit centre when orbiting. Decides which plot has focus.
     glm::vec3 focusPoint() const {

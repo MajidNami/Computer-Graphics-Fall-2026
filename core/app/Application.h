@@ -14,6 +14,7 @@
 #include "engine/Camera.h"
 #include "engine/Clock.h"
 #include "engine/Collision.h"
+#include "engine/FirstPersonHands.h"
 #include "engine/Hud.h"
 #include "engine/Options.h"
 #include "engine/Settings.h"
@@ -96,6 +97,7 @@ private:
     Sky sky_;
     Hud hud_;
     Camera camera_;
+    FirstPersonHands hands_;
     Settings settings_;
     CityClock clock_;
     Tour tour_;
