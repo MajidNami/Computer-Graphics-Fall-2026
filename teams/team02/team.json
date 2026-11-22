@@ -1,0 +1,17 @@
+{
+  "id": "team02",
+  "title": "موزه‌ی علوم",
+  "title_en": "Science Museum",
+  "members": [
+    {
+      "name": "Delaraam Rooani",
+      "student_id": "40231026",
+      "github": "delaraamroohani"
+    },
+    {
+      "name": "Mahdieh Tahami",
+      "student_id": "40231011",
+      "github": "TahamiMahdieh"
+    }
+  ]
+}
