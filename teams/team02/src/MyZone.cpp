@@ -25,65 +25,105 @@ public:
         glEndList();
 
         // What the visitor cannot walk through.
-        ctx.addCollider({-5.0f, 0.0f, -14.0f}, {5.0f, 4.0f, -6.0f});
         ctx.log("hello from " + ctx.teamId() + " on plot " + ctx.plot().id);
     }
 
-    void update(const Frame& frame) override {
-        // Move things with frame.dt so the speed is the same on every computer.
-        if (spinning_) angle_ += 45.0f * frame.dt;  // degrees per second
-    }
+    void update(const Frame&) override {}
+
+    void reset() override {}
+
+    void onKey(int) override {}
 
     void draw(const Context&) const override {
         glCallList(scenery_);
+    }
 
-        // A weather vane on the roof that turns.
+
+private:
+    // Draw one rectangular paved area.
+    void drawPaving(float x, float z,
+                    float width, float depth) const {
         glPushMatrix();
-        glTranslatef(0.0f, 6.6f, -10.0f);
-        glRotatef(angle_, 0.0f, 1.0f, 0.0f);
-        glColor3f(0.85f, 0.70f, 0.25f);
-        shapes::box(0.1f, 0.1f, 1.6f);
-        glTranslatef(0.0f, 0.0f, 0.8f);
-        shapes::cone(0.2f, 0.5f, 12);
+        glTranslatef(x, 0.03f, z);
+        shapes::plane(width, depth);
         glPopMatrix();
     }
 
-    void reset() override { angle_ = 0.0f; }
-
-    void onKey(int key) override {
-        if (key == 'v') spinning_ = !spinning_;  // V stops and starts the vane
-    }
-
-private:
     void drawScenery(const PlotInfo& plot) const {
-        glColor3f(0.36f, 0.50f, 0.24f);  // lawn over the whole plot
+
+        // ---------------------------------
+        // 1. Grass covering the entire plot
+        // ---------------------------------
+
+        glColor3f(0.36f, 0.52f, 0.29f);
+
         glPushMatrix();
         glTranslatef(0.0f, 0.01f, 0.0f);
         shapes::plane(plot.width, plot.depth);
         glPopMatrix();
 
-        glColor3f(0.70f, 0.64f, 0.55f);  // a path from the house to the gate
-        glPushMatrix();
-        glTranslatef(0.0f, 0.02f, 17.0f);
-        shapes::plane(3.0f, 46.0f);
-        glPopMatrix();
 
-        glColor3f(0.92f, 0.85f, 0.70f);  // a small house: walls and a roof
-        glPushMatrix();
-        glTranslatef(0.0f, 2.0f, -10.0f);
-        shapes::box(10.0f, 4.0f, 8.0f);
-        glPopMatrix();
-        glColor3f(0.60f, 0.25f, 0.18f);
-        glPushMatrix();
-        glTranslatef(0.0f, 4.0f, -10.0f);
-        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-        shapes::gableRoof(8.6f, 2.4f, 10.6f);
-        glPopMatrix();
+        // ---------------------------------
+        // 2. Main pedestrian walkway
+        // Entrance -> Science Museum
+        // ---------------------------------
+
+        glColor3f(0.72f, 0.70f, 0.66f);
+
+        drawPaving(0.0f, 16.0f, 5.0f, 60.0f);
+
+
+        // ---------------------------------
+        // 3. Entrance plaza
+        // ---------------------------------
+
+        glColor3f(0.80f, 0.78f, 0.73f);
+
+        drawPaving(0.0f, 45.0f, 12.0f, 8.0f);
+
+
+        // ---------------------------------
+        // 4. Central cross walkway
+        // Connects both side buildings
+        // ---------------------------------
+
+        glColor3f(0.72f, 0.70f, 0.66f);
+
+        drawPaving(0.0f, 15.0f, 50.0f, 4.0f);
+
+
+        // ---------------------------------
+        // 5. Planetarium connector
+        // ---------------------------------
+
+        drawPaving(-25.0f, 11.0f, 4.0f, 7.0f);
+
+
+        // ---------------------------------
+        // 6. Cafe connector
+        // ---------------------------------
+
+        drawPaving(24.0f, 11.0f, 4.0f, 7.0f);
+
+
+        // ---------------------------------
+        // 7. Museum entrance plaza
+        // ---------------------------------
+
+        glColor3f(0.80f, 0.78f, 0.73f);
+
+        drawPaving(0.0f, -10.5f, 18.0f, 7.0f);
+
+
+        // ---------------------------------
+        // 8. Atom sculpture plaza
+        // ---------------------------------
+
+        drawPaving(-12.0f, 31.0f, 14.0f, 14.0f);
     }
 
+
     GLuint scenery_ = 0;
-    float angle_ = 0.0f;
-    bool spinning_ = true;
 };
 
 }  // namespace team02
