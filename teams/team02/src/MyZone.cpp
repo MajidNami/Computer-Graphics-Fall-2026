@@ -25,6 +25,11 @@ public:
         glEndList();
 
         // What the visitor cannot walk through.
+        // Collision boundary around the atom sculpture.
+        ctx.addCollider(
+            {-16.0f, 0.0f, 27.0f},
+            {-8.0f, 8.0f, 35.0f}
+        );
         ctx.log("hello from " + ctx.teamId() + " on plot " + ctx.plot().id);
     }
 
@@ -120,7 +125,135 @@ private:
         // ---------------------------------
 
         drawPaving(-12.0f, 31.0f, 14.0f, 14.0f);
+        // Build the Science Museum atom landmark.
+        drawAtomLandmark();
     }
+
+
+    // =========================================
+    // SCIENCE MUSEUM - ATOM LANDMARK
+    // =========================================
+
+    void drawAtomLandmark() const {
+
+        glPushMatrix();
+
+        // Position the sculpture in the entrance plaza.
+        glTranslatef(-12.0f, 0.0f, 31.0f);
+
+
+        // -------------------------------------
+        // 1. Square pedestal
+        // -------------------------------------
+
+        glColor3f(0.30f, 0.34f, 0.40f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 0.25f, 0.0f);
+        shapes::box(2.2f, 0.5f, 2.2f);
+        glPopMatrix();
+
+
+        // -------------------------------------
+        // 2. Central support column
+        // -------------------------------------
+
+        glColor3f(0.70f, 0.74f, 0.80f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 0.5f, 0.0f);
+        shapes::cylinder(0.18f, 3.8f, 20);
+        glPopMatrix();
+
+
+        // All orbital components share this height.
+        const float centerY = 4.4f;
+        const float orbitRadius = 3.3f;
+
+
+        // -------------------------------------
+        // 3. Central nucleus
+        // -------------------------------------
+
+        glColor3f(0.10f, 0.38f, 0.85f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, centerY, 0.0f);
+        shapes::sphere(0.9f, 32, 20);
+        glPopMatrix();
+
+
+        // -------------------------------------
+        // 4. First orbital ring
+        // -------------------------------------
+
+        glPushMatrix();
+
+        glTranslatef(0.0f, centerY, 0.0f);
+        glRotatef(55.0f, 1.0f, 0.0f, 0.0f);
+
+        glColor3f(0.85f, 0.88f, 0.93f);
+        shapes::torus(orbitRadius, 0.13f, 48, 12);
+
+        // Electron on the first orbit.
+        glPushMatrix();
+        glTranslatef(orbitRadius, 0.0f, 0.0f);
+        glColor3f(0.95f, 0.65f, 0.12f);
+        shapes::sphere(0.38f, 20, 14);
+        glPopMatrix();
+
+        glPopMatrix();
+
+
+        // -------------------------------------
+        // 5. Second orbital ring
+        // -------------------------------------
+
+        glPushMatrix();
+
+        glTranslatef(0.0f, centerY, 0.0f);
+        glRotatef(55.0f, 0.0f, 0.0f, 1.0f);
+        glRotatef(35.0f, 0.0f, 1.0f, 0.0f);
+
+        glColor3f(0.20f, 0.72f, 0.85f);
+        shapes::torus(orbitRadius, 0.13f, 48, 12);
+
+        // Electron on the second orbit.
+        glPushMatrix();
+        glTranslatef(orbitRadius, 0.0f, 0.0f);
+        glColor3f(0.95f, 0.65f, 0.12f);
+        shapes::sphere(0.38f, 20, 14);
+        glPopMatrix();
+
+        glPopMatrix();
+
+
+        // -------------------------------------
+        // 6. Third orbital ring
+        // -------------------------------------
+
+        glPushMatrix();
+
+        glTranslatef(0.0f, centerY, 0.0f);
+        glRotatef(65.0f, 1.0f, 0.0f, 0.0f);
+        glRotatef(65.0f, 0.0f, 1.0f, 0.0f);
+
+        glColor3f(0.55f, 0.68f, 0.95f);
+        shapes::torus(orbitRadius, 0.13f, 48, 12);
+
+        // Electron on the third orbit.
+        glPushMatrix();
+        glTranslatef(orbitRadius, 0.0f, 0.0f);
+        glColor3f(0.95f, 0.65f, 0.12f);
+        shapes::sphere(0.38f, 20, 14);
+        glPopMatrix();
+
+        glPopMatrix();
+
+
+        glPopMatrix();
+    }
+
 
 
     GLuint scenery_ = 0;
