@@ -1,0 +1,17 @@
+{
+    "id":  "team12",
+    "title":  "ورزشگاه فوتبال",
+    "title_en":  "Football Stadium",
+    "members":  [
+                    {
+                        "name":  "Amirabbas",
+                        "student_id":  "",
+                        "github":  ""
+                    },
+                    {
+                        "name":  "Mahan",
+                        "student_id":  "",
+                        "github":  ""
+                    }
+                ]
+}
