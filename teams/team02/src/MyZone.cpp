@@ -134,125 +134,101 @@ private:
     // SCIENCE MUSEUM - ATOM LANDMARK
     // =========================================
 
+    
+    // =========================================
+    // SCIENCE MUSEUM - ATOM LANDMARK
+    // =========================================
+
+    // Draw one orbital ring and its electron.
+    void drawOrbit(float azimuth, float electronAngle) const {
+
+        const float orbitRadius = 4.5f;
+
+        glPushMatrix();
+
+        // Rotate the orbital plane around the Y axis.
+        glRotatef(azimuth, 0.0f, 1.0f, 0.0f);
+
+        // Tilt the orbital plane.
+        glRotatef(35.264f, 1.0f, 0.0f, 0.0f);
+
+        // Silver orbital ring.
+        glColor3f(0.78f, 0.81f, 0.85f);
+        shapes::torus(orbitRadius, 0.07f, 64, 10);
+
+        // Place the electron at a different position
+        // on each orbital ring.
+        glPushMatrix();
+
+        glRotatef(electronAngle, 0.0f, 1.0f, 0.0f);
+        glTranslatef(orbitRadius, 0.0f, 0.0f);
+
+        glColor3f(0.58f, 0.62f, 0.68f);
+        shapes::sphere(0.32f, 24, 16);
+
+        glPopMatrix();
+
+        glPopMatrix();
+    }
+
+
+    // Build the complete atom sculpture.
     void drawAtomLandmark() const {
 
         glPushMatrix();
 
-        // Position the sculpture in the entrance plaza.
+        // Position on the plot.
         glTranslatef(-12.0f, 0.0f, 31.0f);
 
 
         // -------------------------------------
-        // 1. Square pedestal
+        // 1. Metallic pedestal
         // -------------------------------------
 
-        glColor3f(0.30f, 0.34f, 0.40f);
+        glColor3f(0.32f, 0.35f, 0.39f);
 
-        glPushMatrix();
+        // glPushMatrix();
         glTranslatef(0.0f, 0.25f, 0.0f);
-        shapes::box(2.2f, 0.5f, 2.2f);
-        glPopMatrix();
+        shapes::box(3.2f, 0.5f, 3.2f);
 
 
         // -------------------------------------
-        // 2. Central support column
+        // 2. Central support
         // -------------------------------------
 
-        glColor3f(0.70f, 0.74f, 0.80f);
+        glColor3f(0.76f, 0.79f, 0.83f);
 
-        glPushMatrix();
-        glTranslatef(0.0f, 0.5f, 0.0f);
-        shapes::cylinder(0.18f, 3.8f, 20);
-        glPopMatrix();
-
-
-        // All orbital components share this height.
-        const float centerY = 4.4f;
-        const float orbitRadius = 3.3f;
+        // glPushMatrix();
+        glTranslatef(0.0f, 0.25f, 0.0f);
+        shapes::cylinder(0.22f, 7.0f, 32);
 
 
         // -------------------------------------
         // 3. Central nucleus
         // -------------------------------------
 
-        glColor3f(0.10f, 0.38f, 0.85f);
+        glColor3f(0.83f, 0.85f, 0.88f);
 
-        glPushMatrix();
-        glTranslatef(0.0f, centerY, 0.0f);
-        shapes::sphere(0.9f, 32, 20);
-        glPopMatrix();
-
-
-        // -------------------------------------
-        // 4. First orbital ring
-        // -------------------------------------
-
-        glPushMatrix();
-
-        glTranslatef(0.0f, centerY, 0.0f);
-        glRotatef(55.0f, 1.0f, 0.0f, 0.0f);
-
-        glColor3f(0.85f, 0.88f, 0.93f);
-        shapes::torus(orbitRadius, 0.13f, 48, 12);
-
-        // Electron on the first orbit.
-        glPushMatrix();
-        glTranslatef(orbitRadius, 0.0f, 0.0f);
-        glColor3f(0.95f, 0.65f, 0.12f);
-        shapes::sphere(0.38f, 20, 14);
-        glPopMatrix();
-
-        glPopMatrix();
+        // glPushMatrix();
+        glTranslatef(0.0f, 7.0f, 0.0f);
+        shapes::sphere(1.15f, 32, 24);
 
 
         // -------------------------------------
-        // 5. Second orbital ring
+        // 4. Three symmetrical orbital rings
         // -------------------------------------
 
-        glPushMatrix();
+        // The three orbital planes are separated
+        // by equal 60-degree angles.
 
-        glTranslatef(0.0f, centerY, 0.0f);
-        glRotatef(55.0f, 0.0f, 0.0f, 1.0f);
-        glRotatef(35.0f, 0.0f, 1.0f, 0.0f);
-
-        glColor3f(0.20f, 0.72f, 0.85f);
-        shapes::torus(orbitRadius, 0.13f, 48, 12);
-
-        // Electron on the second orbit.
-        glPushMatrix();
-        glTranslatef(orbitRadius, 0.0f, 0.0f);
-        glColor3f(0.95f, 0.65f, 0.12f);
-        shapes::sphere(0.38f, 20, 14);
-        glPopMatrix();
-
-        glPopMatrix();
-
-
-        // -------------------------------------
-        // 6. Third orbital ring
-        // -------------------------------------
-
-        glPushMatrix();
-
-        glTranslatef(0.0f, centerY, 0.0f);
-        glRotatef(65.0f, 1.0f, 0.0f, 0.0f);
-        glRotatef(65.0f, 0.0f, 1.0f, 0.0f);
-
-        glColor3f(0.55f, 0.68f, 0.95f);
-        shapes::torus(orbitRadius, 0.13f, 48, 12);
-
-        // Electron on the third orbit.
-        glPushMatrix();
-        glTranslatef(orbitRadius, 0.0f, 0.0f);
-        glColor3f(0.95f, 0.65f, 0.12f);
-        shapes::sphere(0.38f, 20, 14);
-        glPopMatrix();
-
-        glPopMatrix();
+        drawOrbit(0.0f,   0.0f);
+        drawOrbit(120.0f, 120.0f);
+        drawOrbit(240.0f, 240.0f);
 
 
         glPopMatrix();
     }
+
 
 
 
