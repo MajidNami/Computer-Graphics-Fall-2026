@@ -71,6 +71,30 @@ constexpr float kSeatArcEndDeg   = 320.0f;
 // Heights of the chrome rings that hug the dome (metres above the dome base).
 constexpr float kDomeRingHeights[] = {2.0f, 4.0f, 6.0f};
 
+// =========================================
+// CAFE CONSTANTS
+// =========================================
+
+constexpr float kCafeCx = 24.0f;
+constexpr float kCafeCz = 0.0f;
+
+constexpr float kCafeWidth = 16.0f;
+constexpr float kCafeDepth = 14.0f;
+constexpr float kCafeHeight = 5.0f;
+
+constexpr float kCafeFrontZ = kCafeCz + kCafeDepth * 0.5f;
+
+constexpr float kCafeDoorWidth = 3.0f;
+constexpr float kCafeDoorHeight = 2.8f;
+
+constexpr float kCafeAwningWidth = 13.0f;
+constexpr float kCafeAwningDepth = 2.5f;
+
+constexpr float kCafeCounterWidth = 7.0f;
+constexpr float kCafeCounterHeight = 1.1f;
+
+
+
 // A point on a hemisphere, in the hemisphere's own frame.
 struct DomePoint {
     float x, y, z;
@@ -95,6 +119,7 @@ public:
         );
 
         addPlanetariumColliders(ctx);
+        addCafeColliders(ctx);
 
         ctx.log("hello from " + ctx.teamId() + " on plot " + ctx.plot().id);
     }
@@ -204,6 +229,8 @@ private:
 
         drawAtomLandmark();
         drawPlanetarium();
+
+        drawCafe(); 
     }
 
 
@@ -864,6 +891,524 @@ private:
 
         glEnable(GL_LIGHTING);
     }
+
+    void drawCafeFoundation() const {
+
+        glColor3f(0.34f, 0.36f, 0.40f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 0.15f, 0.0f);
+        shapes::box(16.4f, 0.3f, 14.4f);
+        glPopMatrix();
+
+        // Main interior floor.
+        glColor3f(0.65f, 0.62f, 0.57f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 0.32f, 0.0f);
+        shapes::box(15.9f, 0.08f, 13.9f);
+        glPopMatrix();
+    }
+
+    void drawCafeWalls() const {
+
+        const float wallY = 2.85f;
+        const float wallHeight = 5.0f;
+        const float wallThickness = 0.35f;
+
+        glColor3f(0.83f, 0.82f, 0.77f);
+
+        // LEFT WALL.
+        glPushMatrix();
+        glTranslatef(-7.8f, wallY, 0.0f);
+        shapes::box(wallThickness, wallHeight, 14.0f);
+        glPopMatrix();
+
+        // RIGHT WALL.
+        glPushMatrix();
+        glTranslatef(7.8f, wallY, 0.0f);
+        shapes::box(wallThickness, wallHeight, 14.0f);
+        glPopMatrix();
+
+        // BACK WALL.
+        glPushMatrix();
+        glTranslatef(0.0f, wallY, -6.8f);
+        shapes::box(16.0f, wallHeight, wallThickness);
+        glPopMatrix();
+
+        // Front-left structural pier.
+        glPushMatrix();
+        glTranslatef(-7.25f, wallY, 6.8f);
+        shapes::box(1.5f, wallHeight, wallThickness);
+        glPopMatrix();
+
+        // Front-right structural pier.
+        glPushMatrix();
+        glTranslatef(7.25f, wallY, 6.8f);
+        shapes::box(1.5f, wallHeight, wallThickness);
+        glPopMatrix();
+
+        // Upper front structural beam.
+        glPushMatrix();
+        glTranslatef(0.0f, 4.85f, 6.8f);
+        shapes::box(16.0f, 1.0f, wallThickness);
+        glPopMatrix();
+
+        // Roof slab.
+        glColor3f(0.30f, 0.33f, 0.38f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 5.4f, 0.0f);
+        shapes::box(16.5f, 0.35f, 14.5f);
+        glPopMatrix();
+    }
+
+    void drawCafeWindows() const {
+
+        // Low front wall (sill) under the windows, on both sides of the door.
+        glColor3f(0.83f, 0.82f, 0.77f);
+        for (int side = -1; side <= 1; side += 2) {
+            glPushMatrix();
+            glTranslatef(side * 4.0f, 0.93f, 6.8f);   // y 0.36 .. 1.5
+            shapes::box(5.0f, 1.14f, 0.35f);
+            glPopMatrix();
+        }
+
+        // Blue-tinted glass.
+        glColor3f(0.18f, 0.38f, 0.56f);
+
+        // Front windows (y 1.5 .. 4.35), left and right of the door.
+        for (int side = -1; side <= 1; side += 2) {
+            glPushMatrix();
+            glTranslatef(side * 4.75f, 2.925f, 7.0f);
+            shapes::box(4.5f, 2.85f, 0.08f);
+            glPopMatrix();
+        }
+
+        // Transom window above the door (closes the gap up to the beam).
+        glPushMatrix();
+        glTranslatef(0.0f, 3.8f, 7.0f);
+        shapes::box(3.0f, 1.1f, 0.08f);
+        glPopMatrix();
+
+        // Side windows, placed just outside the wall faces (x = +-7.975).
+        for (int side = -1; side <= 1; side += 2) {
+            glPushMatrix();
+            glTranslatef(side * 8.0f, 2.8f, 0.0f);
+            shapes::box(0.08f, 2.5f, 8.0f);
+            glPopMatrix();
+        }
+
+        // Metallic window frames.
+        glColor3f(0.35f, 0.39f, 0.44f);
+
+        for (int side = -1; side <= 1; side += 2) {
+            glPushMatrix();
+            glTranslatef(side * 8.06f, 2.8f, 0.0f);
+            shapes::box(0.12f, 2.7f, 0.12f);
+            glPopMatrix();
+        }
+
+        // Horizontal front frames: one per window, none across the doorway.
+        const float frameY[] = {1.5f, 4.3f};
+        for (float y : frameY) {
+            for (int side = -1; side <= 1; side += 2) {
+                glPushMatrix();
+                glTranslatef(side * 4.75f, y, 7.08f);
+                shapes::box(4.5f, 0.12f, 0.12f);
+                glPopMatrix();
+            }
+        }
+    }
+
+    void drawCafeEntrance() const {
+
+        // Metallic entrance frame.
+        glColor3f(0.40f, 0.44f, 0.50f);
+
+        // Left door frame.
+        glPushMatrix();
+        glTranslatef(-1.55f, 1.75f, 6.85f);
+        shapes::box(0.12f, 3.0f, 0.20f);
+        glPopMatrix();
+
+        // Right door frame.
+        glPushMatrix();
+        glTranslatef(1.55f, 1.75f, 6.85f);
+        shapes::box(0.12f, 3.0f, 0.20f);
+        glPopMatrix();
+
+        // Top frame.
+        glPushMatrix();
+        glTranslatef(0.0f, 3.2f, 6.85f);
+        shapes::box(3.2f, 0.12f, 0.20f);
+        glPopMatrix();
+
+        // Two glass door leaves swung open outwards. Each leaf is modelled
+        // closed and rotated about its hinge (the door jamb).
+        const float leafWidth  = kCafeDoorWidth * 0.5f;
+
+        glColor3f(0.30f, 0.55f, 0.72f);
+
+        for (int side = -1; side <= 1; side += 2) {
+
+            // Hinge point p in the leaf's own frame: its outer edge.
+            const float hingeX = side * leafWidth * 0.5f;
+
+            glPushMatrix();
+
+            // Place the closed leaf in the doorway, standing on the floor.
+            glTranslatef(side * (kCafeDoorWidth * 0.5f - leafWidth * 0.5f),
+                         0.36f + kCafeDoorHeight * 0.5f,
+                         6.85f);
+
+            glTranslatef(hingeX, 0.0f, 0.0f);                  // T(p)
+            glRotatef(side * 65.0f, 0.0f, 1.0f, 0.0f);         // R
+            glTranslatef(-hingeX, 0.0f, 0.0f);                 // T(-p)
+
+            shapes::box(leafWidth, kCafeDoorHeight, 0.07f);
+
+            glPopMatrix();
+        }
+
+        drawCafeSteps();
+    }
+
+
+    void drawCafeSteps() const {
+
+        glColor3f(0.56f, 0.57f, 0.59f);
+
+        // Upper step, next to the building.
+        glPushMatrix();
+        glTranslatef(0.0f, 0.12f, 7.65f);
+        shapes::box(4.5f, 0.24f, 1.0f);
+        glPopMatrix();
+
+        // Lower step, further out (steps must go down away from the door).
+        glPushMatrix();
+        glTranslatef(0.0f, 0.06f, 8.35f);
+        shapes::box(4.5f, 0.12f, 0.7f);
+        glPopMatrix();
+    }
+
+    void drawCafeAwning() const {
+
+        const int stripeCount = 12;
+
+        const float stripeWidth =
+            kCafeAwningWidth / stripeCount;
+
+        const float awningY = 4.35f;
+        const float awningZ = 8.0f;
+
+        for (int i = 0; i < stripeCount; ++i) {
+
+            // Alternate navy and cream.
+            if (i % 2 == 0)
+                glColor3f(0.08f, 0.16f, 0.30f);
+            else
+                glColor3f(0.91f, 0.86f, 0.74f);
+
+            glPushMatrix();
+
+            glTranslatef(
+                -kCafeAwningWidth * 0.5f
+                    + stripeWidth * (i + 0.5f),
+                awningY,
+                awningZ
+            );
+
+            // Main awning panel.
+            shapes::box(
+                stripeWidth,
+                0.16f,
+                kCafeAwningDepth
+            );
+
+            // Decorative hanging front edge.
+            glTranslatef(
+                0.0f,
+                -0.20f,
+                kCafeAwningDepth * 0.5f - 0.08f
+            );
+
+            shapes::box(stripeWidth, 0.42f, 0.12f);
+
+            glPopMatrix();
+        }
+
+        // Supporting metallic posts: from the ground up to the awning.
+        glColor3f(0.45f, 0.48f, 0.53f);
+
+        for (int side = -1; side <= 1; side += 2) {
+
+            glPushMatrix();
+
+            glTranslatef(side * 6.2f, 2.135f, 9.0f);
+            shapes::box(0.12f, 4.27f, 0.12f);
+
+            glPopMatrix();
+        }
+    }
+
+    void drawCafeInterior() const {
+
+        drawCafeCounter();
+
+        // Decorative back-wall feature.
+        glColor3f(0.22f, 0.25f, 0.30f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 3.3f, -6.58f);
+        shapes::box(8.0f, 1.5f, 0.12f);
+        glPopMatrix();
+
+        // Warm lighting feature above the counter.
+        glDisable(GL_LIGHTING);
+
+        glColor3f(1.0f, 0.76f, 0.38f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 5.18f, -3.0f);
+        shapes::box(7.0f, 0.06f, 0.06f);
+        glPopMatrix();
+
+        glEnable(GL_LIGHTING);
+    }
+
+
+    void drawCafeCounter() const {
+
+        // Counter base.
+        glColor3f(0.27f, 0.20f, 0.16f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 0.90f, -4.0f);
+        shapes::box(kCafeCounterWidth, 1.1f, 1.2f);
+        glPopMatrix();
+
+        // Countertop.
+        glColor3f(0.78f, 0.76f, 0.70f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 1.50f, -4.0f);
+        shapes::box(7.4f, 0.16f, 1.45f);
+        glPopMatrix();
+
+        // Metallic front decoration.
+        glColor3f(0.65f, 0.68f, 0.72f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 0.90f, -3.38f);
+        shapes::box(6.8f, 0.08f, 0.04f);
+        glPopMatrix();
+
+        // Keep this area available for future equipment:
+        // coffee machine, grinder, cups, display case, etc.
+        drawCafeCounterEquipment();
+    }
+
+
+    // Future equipment goes here.
+    void drawCafeCounterEquipment() const {
+
+        // Currently intentionally empty.
+        //
+        // Later:
+        // drawCoffeeMachine();
+        // drawCoffeeGrinder();
+        // drawCupDisplay();
+        // drawCashRegister();
+    }
+
+    void drawOutdoorSeating() const {
+
+        // Two tables on each side of the connector path (x = cafe +-4..7).
+        const float tableOffsetX[] = {-7.0f, -4.0f, 4.0f, 7.0f};
+        const float tableZ = kCafeCz + 11.0f;
+
+        for (float offsetX : tableOffsetX) {
+
+            glPushMatrix();
+
+            glTranslatef(kCafeCx + offsetX, 0.0f, tableZ);
+
+            drawCafeTable();
+
+            // Two chairs, facing the table.
+            glPushMatrix();
+            glTranslatef(0.0f, 0.0f, -1.45f);
+            drawCafeChair(0.0f);
+            glPopMatrix();
+
+            glPushMatrix();
+            glTranslatef(0.0f, 0.0f, 1.45f);
+            drawCafeChair(180.0f);
+            glPopMatrix();
+
+            glPopMatrix();
+        }
+    }
+
+
+    void drawCafeTable() const {
+
+        // Central pedestal.
+        glColor3f(0.28f, 0.30f, 0.34f);
+
+        shapes::cylinder(0.13f, 0.88f, 24);
+
+        // Circular base.
+        shapes::cylinder(0.65f, 0.12f, 32);
+
+        // Circular tabletop.
+        glColor3f(0.83f, 0.80f, 0.73f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 0.88f, 0.0f);
+        shapes::cylinder(0.85f, 0.12f, 40);
+        glPopMatrix();
+
+        // Metallic rim.
+        glColor3f(0.48f, 0.52f, 0.57f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 1.0f, 0.0f);
+        shapes::torus(0.83f, 0.035f, 32, 6);
+        glPopMatrix();
+    }
+
+    void drawCafeChair(float rotation) const {
+
+        glPushMatrix();
+
+        glRotatef(rotation, 0.0f, 1.0f, 0.0f);
+
+        // Four slender legs.
+        glColor3f(0.27f, 0.30f, 0.35f);
+
+        for (int x = -1; x <= 1; x += 2) {
+            for (int z = -1; z <= 1; z += 2) {
+
+                glPushMatrix();
+
+                glTranslatef(x * 0.27f, 0.0f, z * 0.27f);
+
+                shapes::cylinder(0.035f, 0.72f, 10);
+
+                glPopMatrix();
+            }
+        }
+
+        // Seat cushion.
+        glColor3f(0.12f, 0.22f, 0.34f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 0.76f, 0.0f);
+        shapes::box(0.72f, 0.13f, 0.72f);
+        glPopMatrix();
+
+        // Curved back approximation.
+        glColor3f(0.75f, 0.72f, 0.66f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 1.20f, -0.32f);
+        shapes::box(0.72f, 0.78f, 0.12f);
+        glPopMatrix();
+
+        // Decorative upper back rail.
+        glColor3f(0.35f, 0.39f, 0.45f);
+
+        glPushMatrix();
+        glTranslatef(0.0f, 1.62f, -0.32f);
+        shapes::box(0.78f, 0.08f, 0.16f);
+        glPopMatrix();
+
+        glPopMatrix();
+    }
+
+    void addCafeColliders(Context& ctx) {
+
+        // Left wall.
+        ctx.addCollider(
+            {kCafeCx - 8.0f, 0.0f, -7.0f},
+            {kCafeCx - 7.65f, 5.35f, 7.0f}
+        );
+
+        // Right wall.
+        ctx.addCollider(
+            {kCafeCx + 7.65f, 0.0f, -7.0f},
+            {kCafeCx + 8.0f, 5.35f, 7.0f}
+        );
+
+        // Back wall.
+        ctx.addCollider(
+            {kCafeCx - 8.0f, 0.0f, -7.0f},
+            {kCafeCx + 8.0f, 5.35f, -6.65f}
+        );
+
+        // Front-left pier.
+        ctx.addCollider(
+            {kCafeCx - 8.0f, 0.0f, 6.65f},
+            {kCafeCx - 6.0f, 5.35f, 7.0f}
+        );
+
+        // Front-right pier.
+        ctx.addCollider(
+            {kCafeCx + 6.0f, 0.0f, 6.65f},
+            {kCafeCx + 8.0f, 5.35f, 7.0f}
+        );
+
+        // Counter.
+        ctx.addCollider(
+            {kCafeCx - 3.5f, 0.35f, -4.7f},
+            {kCafeCx + 3.5f, 1.55f, -3.3f}
+        );
+
+        // Low front walls under the windows (either side of the door).
+        ctx.addCollider(
+            {kCafeCx - 6.5f, 0.0f, 6.65f},
+            {kCafeCx - 1.5f, 1.5f, 7.0f}
+        );
+        ctx.addCollider(
+            {kCafeCx + 1.5f, 0.0f, 6.65f},
+            {kCafeCx + 6.5f, 1.5f, 7.0f}
+        );
+
+        // Awning posts.
+        for (int side = -1; side <= 1; side += 2) {
+            const float px = kCafeCx + side * 6.2f;
+            ctx.addCollider({px - 0.1f, 0.0f, 8.9f}, {px + 0.1f, 4.27f, 9.1f});
+        }
+    }
+    // =========================================
+// SCIENCE MUSEUM - CAFE
+// =========================================
+
+    void drawCafe() const {
+
+        glEnable(GL_NORMALIZE);
+
+        glPushMatrix();
+
+        // Position the cafe on the right side of the plot.
+        glTranslatef(kCafeCx, 0.0f, kCafeCz);
+
+        drawCafeFoundation();
+        drawCafeWalls();
+        drawCafeWindows();
+        drawCafeEntrance();
+        drawCafeAwning();
+        drawCafeInterior();
+
+        glPopMatrix();
+
+        // Outdoor furniture is positioned relative to the plot.
+        drawOutdoorSeating();
+    }
+
+    
 
 
     GLuint scenery_ = 0;
